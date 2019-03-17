@@ -49,3 +49,11 @@ body{
     border-style: solid;
     padding: 0px 25px;
 }
+
+#space{
+    font-size: 15px;
+    width: 30px;
+    border-color: white;
+    border-style: solid;
+    flex-shrink:
+}
