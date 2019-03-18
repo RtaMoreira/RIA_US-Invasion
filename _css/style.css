@@ -66,8 +66,41 @@ body{
 
 #space{
     font-size: 15px;
-    width: 30px;
+    width: 80px;
+    height: 20px;
     border-color: white;
     border-style: solid;
-    flex-shrink:
+    padding: 5px;
+}
+
+.partControl{
+    display: inline-flex;
+    align-items: center;
+    margin-top: -10px;
+}
+
+#controle > div:nth-child(2) > img:nth-child(1),#controle > div:nth-child(3) > img:nth-child(1),#controle > div:nth-child(5) > img:nth-child(1),#controle > div:nth-child(6) > img:nth-child(1){
+    opacity: 0;
+}
+
+.logo{
+    width: 30px;
+    height: 30px;
+}
+
+.logoMovement{
+    margin-left: 10px;
+}
+
+.instuction{
+    margin-left: 10px;
+}
+
+#pauseArea{
+    display: inline-flex;
+    align-items: center;
+}
+
+#pauseStatement{
+    margin-left: 10px;
 }
