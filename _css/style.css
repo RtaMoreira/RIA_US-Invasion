@@ -42,12 +42,26 @@ body{
     margin: 5px 0px;
 }
 
-#plus{
+#plus a h2{
     margin-top: 50px;
     align-self: flex-end;
     border-color: white;
     border-style: solid;
-    padding: 0px 25px;
+    padding: 25px 25px;
+    width: max-content;
+    color: white;
+}
+
+#plus a{
+    text-decoration: none;
+}
+
+#plus a h2:hover{
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#plus a h2:active{
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 #space{
