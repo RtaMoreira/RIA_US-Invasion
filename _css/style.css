@@ -8,6 +8,7 @@ body{
     display: flex;
     font-family: 'Press Start 2P', cursive;
     color: white;
+    zoom: 77%;
 }
 
 #first,#second,#third{
