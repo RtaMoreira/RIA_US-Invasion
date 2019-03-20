@@ -144,6 +144,7 @@ input[type="button"]{
 
 input[type="button"]:active{
     background-color: darkgreen;
+    outline: 0;
 }
 
 input[type="button"]:focus, .inputPlayers:focus{
@@ -158,7 +159,21 @@ input[type="button"]:focus, .inputPlayers:focus{
     visibility: hidden;
 }
 
+.rockets{
+    width: 80px;
+    height: 100px;
+    margin-top: 210px;
+}
 
+
+/*Rocket placé ici en dur mais ensuite placée dans un canevas pour le jeu*/
+#redrocket{
+    margin-left: 100px;
+}
+
+#bluerocket{
+    margin-left: 210px;
+}
 
 
 /****************
