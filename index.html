@@ -4,7 +4,6 @@
     <link rel="stylesheet" type="text/css" href="_css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="icon" href="_ressources/logo/logo.ico">
-    <script type="text/javascript" src="_javascript/launchGif.js"></script>
 </head>
 <body>
     <div id="first">
@@ -50,24 +49,26 @@
             </div>
         </div>
     </div>
-    <div id="second">
-        <h2 class="hiddenAfterClick">KM : 0</h2>
+
+    <div id="canvas-wrap">
+        <script src="_javascript/game.js"></script>
         <div id="cadreStart" class="hiddenAfterClick">
             <img id="logoApp" src="_ressources/logo/logo.ico">
             <form id="startForm">
                 <div class="fieldFormStart">
                 <img id="imgPlayer1" src="_ressources/logo/logoArrows/PlumeLogo.png">
-                <input type="text" class="inputPlayers" placeholder="Player 1">
+                <input id="player1" type="text" class="inputPlayers" placeholder="Player 1">
                 </div>
                 <div class="fieldFormStart">
                 <img id="imgPlayer2" src="_ressources/logo/logoArrows/Xlogo.png">
-                <input type="text" class="inputPlayers" placeholder="Player 2">
+                <input id="player2" type="text" class="inputPlayers" placeholder="Player 2">
                 </div>
-                <input type="button" value="START" onclick="launchGif()">
+                <input type="button" value="START" onclick="launchGame()">
             </form>
         </div>
-        <img id="gifAnimation" src="_ressources/gif/ropi.gif">
     </div>
+
+
 
     <div id="third">
         <h2>PALMARES</h2>

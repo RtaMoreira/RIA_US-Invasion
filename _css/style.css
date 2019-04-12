@@ -68,6 +68,8 @@ FIRST
 /****************
 SECOND
 ****************/
+#canvas-wrap { position:relative } /* Make this a positioned parent */
+#cadreStart     { position:absolute; top:20px; left:30px; }
 
 #second {
     background-image: url("../_ressources/images/background.png");
