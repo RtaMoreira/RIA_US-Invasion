@@ -186,7 +186,6 @@ input[type="button"]:focus, .inputPlayers:focus{
     margin-top: 40px;
 }
 
-
 /*Rocket placé ici en dur mais ensuite placée dans un canevas pour le jeu*/
 #redrocket{
     margin-left: 100px;
@@ -196,6 +195,17 @@ input[type="button"]:focus, .inputPlayers:focus{
     margin-left: 210px;
 }
 
+#buttonSkip a h2{
+    position: absolute;
+    font-size: 10px;
+    padding: 10px 10px;
+    margin-top: 70px;
+    margin-left: 435px;
+}
+
+#buttonSkip{
+    display : none;
+}
 
 /****************
 THIRD
@@ -218,7 +228,7 @@ THIRD
     margin: 5px 0px;
 }
 
-#plus a h2{
+.buttonLink a h2{
     margin-top: 50px;
     align-self: flex-end;
     border-color: white;
@@ -228,14 +238,14 @@ THIRD
     color: white;
 }
 
-#plus a{
+.buttonLink a{
     text-decoration: none;
 }
 
-#plus a h2:hover{
+.buttonLink a h2:hover{
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-#plus a h2:active{
+.buttonLink a h2:active{
     background-color: rgba(255, 255, 255, 0.7);
 }

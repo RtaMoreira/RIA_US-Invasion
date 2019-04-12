@@ -32,6 +32,7 @@ var launchGame = function () {
     player2 = document.getElementById("player2").value;
     document.getElementById("cadrePlacementStart").style.display = "none";
     document.getElementById("cadrePlacement").style.display = "none";
+    document.getElementById("buttonSkip").style.display = "block";
     startScreen = true;
     phase1 = true;
 }
@@ -190,6 +191,7 @@ var main = function () {
         startAnimation(delta / 100);
 
     if (playing){
+        document.getElementById("buttonSkip").style.display = "none";
         if(!paused)
             update(delta / 1000);
     }
@@ -268,6 +270,17 @@ var startAnimation = function (modifier) {
         }
     }
 };
+
+/********************************************************
+SKIP ANIMATION ON CLICK
+********************************************************/
+var skipAnimation = function(){
+    pause1 = -1;
+    pause2 = -1;
+    pause3 = -1;
+    pause4 = -1;
+}
+
 
 /********************************************************
 PAUSE GAME IF SPACE BAR PRESSED
