@@ -69,7 +69,6 @@ FIRST
 SECOND
 ****************/
 #canvas-wrap { position:relative } /* Make this a positioned parent */
-#cadreStart     { position:absolute; top:20px; left:30px; }
 
 #second {
     background-image: url("../_ressources/images/background.png");
@@ -85,14 +84,38 @@ SECOND
     margin-top: 13px;
 }
 
-#cadreStart{
+#cadrePlacement, #cadrePause{
     background-color: white;
     width: 300px;
     height: 400px;
     border-radius: 8px;
-    margin-left: 150px;
-    margin-top: 100px;
+    margin-left: 140px;
+    margin-top: 220px;
+    position:absolute;
+    top:20px;
+    left:30px;
 }
+
+/*,#cadrePause,#cadrePause>**/
+
+#cadrePlacement,#cadrePlacement>*,#cadrePause,#cadrePause>*{
+    display: none;
+}
+
+/* A voir pour créer une classe parente */
+#cadrePlacementStart{
+    background-color: white;
+    width: 300px;
+    height: 400px;
+    border-radius: 8px;
+    margin-left: 140px;
+    margin-top: 220px;
+    position:absolute;
+    top:20px;
+    left:30px;
+    /*display: none;*/
+}
+
 
 #logoApp{
     width: 100px;
@@ -165,6 +188,12 @@ input[type="button"]:focus, .inputPlayers:focus{
     width: 80px;
     height: 100px;
     margin-top: 210px;
+}
+
+#resultText{
+    color: black;
+    text-align: center;
+    margin-top: 40px;
 }
 
 

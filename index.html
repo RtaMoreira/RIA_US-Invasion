@@ -52,7 +52,7 @@
 
     <div id="canvas-wrap">
         <script src="_javascript/game.js"></script>
-        <div id="cadreStart" class="hiddenAfterClick">
+        <div id="cadrePlacementStart" class="hiddenAfterClick">
             <img id="logoApp" src="_ressources/logo/logo.ico">
             <form id="startForm">
                 <div class="fieldFormStart">
@@ -66,6 +66,19 @@
                 <input type="button" value="START" onclick="launchGame()">
             </form>
         </div>
+
+        <div id="cadrePlacement">
+            <img id="logoApp" src="_ressources/logo/logo.ico">
+            <h2 id="resultText">Player 2 wins !</h2>
+            <input type="button" value="RESTART" onclick="launchGame()">
+        </div>
+
+        <div id="cadrePause">
+            <img id="logoApp" src="_ressources/logo/logo.ico">
+            <h2 id="resultText">Game <br>paused !</h2>
+            <input type="button" value="PLAY" onclick="launchGame()">
+        </div>
+
     </div>
 
 

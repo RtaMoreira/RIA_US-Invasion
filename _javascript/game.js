@@ -29,7 +29,8 @@ BEFORE THE GAME
 var launchGame = function(){
     player1 = document.getElementById("player1").value;
     player2 = document.getElementById("player2").value;
-    document.getElementById("cadreStart").style.display="none";
+    document.getElementById("cadrePlacementStart").style.display="none";
+    document.getElementById("cadrePlacement").style.display="none";
     startScreen=true;
     phase1=true;
 }
