@@ -26,6 +26,9 @@ function launchGif(){
         if (fadeTarget2.style.opacity == 0){
             fadeTarget2.style.display = "none";
             clearInterval(fadeEffect2);
+            //We hide the two rockets during the animation
+            document.getElementById("redrocket").style.display = "none";
+            document.getElementById("bluerocket").style.display = "none";
             //Ww start the gif animation
             document.getElementById("gifAnimation").style.visibility = "visible";
         }
