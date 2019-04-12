@@ -84,7 +84,7 @@ SECOND
     margin-top: 13px;
 }
 
-#cadrePlacement, #cadrePause{
+#cadrePlacement, #cadrePause, #cadrePlacementStart{
     background-color: white;
     width: 300px;
     height: 400px;
@@ -102,22 +102,12 @@ SECOND
     display: none;
 }
 
-/* A voir pour créer une classe parente */
 #cadrePlacementStart{
-    background-color: white;
-    width: 300px;
-    height: 400px;
-    border-radius: 8px;
-    margin-left: 140px;
-    margin-top: 220px;
-    position:absolute;
-    top:20px;
-    left:30px;
     /*display: none;*/
 }
 
 
-#logoApp{
+#logoApp, #logoAppStart, #logoAppPause{
     width: 100px;
     height: 100px;
     margin-left: 95px;
@@ -190,7 +180,7 @@ input[type="button"]:focus, .inputPlayers:focus{
     margin-top: 210px;
 }
 
-#resultText{
+#resultText, #resultTextPause{
     color: black;
     text-align: center;
     margin-top: 40px;

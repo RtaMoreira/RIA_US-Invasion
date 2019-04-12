@@ -1,17 +1,18 @@
 /**********************************************************
 VARIABLES
 **********************************************************/
-var points=0;
-var gravity=350;
-var player1="";
-var player2="";
-var playing=false;
+var points = 0;
+var gravity = 350;
+var player1 = "";
+var player2 = "";
+var playing = false;
 var startScreen = false;
 var pause1 = 20;
 var pause2 = 20;
 var pause3 = 20;
 var pause4 = 20;
 var phase1 = false;
+var paused = false;
 
 /********************************************************
 Create the canvas
@@ -20,70 +21,101 @@ var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 850;
-canvas.id="second";
+canvas.id = "second";
 document.body.appendChild(canvas);
 
 /********************************************************
 BEFORE THE GAME
 ********************************************************/
-var launchGame = function(){
+var launchGame = function () {
     player1 = document.getElementById("player1").value;
     player2 = document.getElementById("player2").value;
-    document.getElementById("cadrePlacementStart").style.display="none";
-    document.getElementById("cadrePlacement").style.display="none";
-    startScreen=true;
-    phase1=true;
+    document.getElementById("cadrePlacementStart").style.display = "none";
+    document.getElementById("cadrePlacement").style.display = "none";
+    startScreen = true;
+    phase1 = true;
 }
+
 //elements
 var muskReady = false;
 var muskImage = new Image();
 muskImage.onload = function () {
-	muskReady = true;
+    muskReady = true;
 };
 muskImage.src = "_ressources/images/elon.png";
-var musk = {y:550,x:600,width:300,height:300};//x go to 300
+var musk = {
+    y: 550,
+    x: 600,
+    width: 300,
+    height: 300
+}; //x go to 300
 
 //elements
 var bezosReady = false;
 var bezosImage = new Image();
 bezosImage.onload = function () {
-	bezosReady = true;
+    bezosReady = true;
 };
 bezosImage.src = "_ressources/images/jeff.png";
-var bezos = {y:550,x:-350,width:350,height:300};//x go to 0
+var bezos = {
+    y: 550,
+    x: -350,
+    width: 350,
+    height: 300
+}; //x go to 0
 
 //bubbles
 var boobal1Ready = false;
 var boobal1Image = new Image();
 boobal1Image.onload = function () {
-	boobal1Ready = true;
+    boobal1Ready = true;
 };
 boobal1Image.src = "_ressources/images/boobal1.png";
-var boobal1 = {y:300,x:-400,width:400,height:300};//x go to 110
+var boobal1 = {
+    y: 300,
+    x: -400,
+    width: 400,
+    height: 300
+}; //x go to 110
 
 var boobal2Ready = false;
 var boobal2Image = new Image();
 boobal2Image.onload = function () {
-	boobal2Ready = true;
+    boobal2Ready = true;
 };
 boobal2Image.src = "_ressources/images/boobal2.png";
-var boobal2 = {y:300,x:1050,width:400,height:300};//x go to 110
+var boobal2 = {
+    y: 300,
+    x: 1050,
+    width: 400,
+    height: 300
+}; //x go to 110
 
 var boobal3Ready = false;
 var boobal3Image = new Image();
 boobal3Image.onload = function () {
-	boobal3Ready = true;
+    boobal3Ready = true;
 };
 boobal3Image.src = "_ressources/images/boobal3.png";
-var boobal3 = {y:300,x:-400,width:400,height:300};//x go to 110
+var boobal3 = {
+    y: 300,
+    x: -400,
+    width: 400,
+    height: 300
+}; //x go to 110
 
 var boobal4Ready = false;
 var boobal4Image = new Image();
 boobal4Image.onload = function () {
-	boobal4Ready = true;
+    boobal4Ready = true;
 };
 boobal4Image.src = "_ressources/images/boobal4.png";
-var boobal4 = {y:300,x:1050,width:400,height:300};//x go to 110
+var boobal4 = {
+    y: 300,
+    x: 1050,
+    width: 400,
+    height: 300
+}; //x go to 110
 
 /********************************************************
 GAME OBJECTS
@@ -91,29 +123,47 @@ GAME OBJECTS
 //BG
 var bgReady = false;
 var bgImage = new Image();
-bgImage.onload = function () {bgReady = true;};
+bgImage.onload = function () {
+    bgReady = true;
+};
 bgImage.src = "_ressources/images/bg.png";
 
 // platform image
 var platformReady = false;
 var platformImage = new Image();
 platformImage.onload = function () {
-	platformReady = true;
+    platformReady = true;
 };
 platformImage.src = "_ressources/images/platform.png";
-var platform = {x:270,y:650,width:150,height:10};
-var platform2 = {x:270,y:400,width:150,height:10};
+var platform = {
+    x: 270,
+    y: 650,
+    width: 150,
+    height: 10
+};
+var platform2 = {
+    x: 270,
+    y: 400,
+    width: 150,
+    height: 10
+};
 
 // red Rocket image
 var redRocketReady = false;
 var redRocketImage = new Image();
 redRocketImage.onload = function () {
-	redRocketReady = true;
+    redRocketReady = true;
 };
 redRocketImage.src = "_ressources/images/redRocket.png";
-var redRocket = {speed: 800,y:750,x:70,width:100,height:100};
-var redRocketJump =0;
-var redRocketStationary=true;
+var redRocket = {
+    speed: 800,
+    y: 750,
+    x: 70,
+    width: 100,
+    height: 100
+};
+var redRocketJump = 0;
+var redRocketStationary = true;
 
 /********************************************************
 KEYBOARD LISTENER
@@ -121,32 +171,35 @@ KEYBOARD LISTENER
 var keysDown = {};
 
 addEventListener("keydown", function (e) {
-	keysDown[e.keyCode] = true;
+    keysDown[e.keyCode] = true;
     console.log(keysDown);
 }, false);
 
 addEventListener("keyup", function (e) {
-	delete keysDown[e.keyCode];
+    delete keysDown[e.keyCode];
 }, false);
 
 /********************************************************
 MAIN LOOP
 ********************************************************/
 var main = function () {
-	var now = Date.now();
-	var delta = now - then;
+    var now = Date.now();
+    var delta = now - then;
 
-    if(startScreen)
-        startAnimation(delta/100);
+    if (startScreen)
+        startAnimation(delta / 100);
 
-    if(playing)
-        update(delta / 1000);
+    if (playing){
+        if(!paused)
+            update(delta / 1000);
+    }
 
-	render();
 
-	then = now;
-	// Request to do this again ASAP
-	requestAnimationFrame(main);
+    render();
+
+    then = now;
+    // Request to do this again ASAP
+    requestAnimationFrame(main);
 };
 
 
@@ -155,53 +208,53 @@ START ANIMATION
 ********************************************************/
 var startAnimation = function (modifier) {
     //characters appear
-    if(phase1){
-        if(musk.x>310)
-            musk.x-=100*modifier;
-        if(bezos.x<0)
-            bezos.x+=100*modifier;
-        if(bezos.x>=0 && musk.x<=310){
-            phase1=false;
+    if (phase1) {
+        if (musk.x > 310)
+            musk.x -= 100 * modifier;
+        if (bezos.x < 0)
+            bezos.x += 100 * modifier;
+        if (bezos.x >= 0 && musk.x <= 310) {
+            phase1 = false;
             console.log("salut");
         }
     }
 
     //do phase 2 (bubbles)
-    if(!phase1){
-        if(boobal1.x<110)
-            boobal1.x+=100*modifier;
-        else{
-            if(pause1>0)
-                pause1-=modifier;
-            else{
+    if (!phase1) {
+        if (boobal1.x < 110)
+            boobal1.x += 100 * modifier;
+        else {
+            if (pause1 > 0)
+                pause1 -= modifier;
+            else {
                 //disapear text1 and appear text2
-                boobal1.y-=100*modifier;
-                if(boobal2.x>110)
-                    boobal2.x-=100*modifier;
-                else{
-                    if(pause2>0)
-                        pause2-=modifier;
-                    else{
-                        boobal2.y-=100*modifier;
-                        if(boobal3.x<110)
-                            boobal3.x+=100*modifier;
-                        else{
-                            if(pause3>0)
-                                pause3-=modifier;
-                            else{
-                                boobal3.y-=100*modifier;
-                                if(boobal4.x>110)
-                                    boobal4.x-=100*modifier;
-                                else{
-                                    if(pause4>0)
-                                        pause4-=modifier;
-                                    else{
-                                        boobal4.y-=100*modifier;
-                                        musk.x+=100*modifier;
-                                        bezos.x-=100*modifier;
-                                        if(bezos.x<=350 && musk.x>950){
-                                            startScreen=false;
-                                            playing=true;
+                boobal1.y -= 100 * modifier;
+                if (boobal2.x > 110)
+                    boobal2.x -= 100 * modifier;
+                else {
+                    if (pause2 > 0)
+                        pause2 -= modifier;
+                    else {
+                        boobal2.y -= 100 * modifier;
+                        if (boobal3.x < 110)
+                            boobal3.x += 100 * modifier;
+                        else {
+                            if (pause3 > 0)
+                                pause3 -= modifier;
+                            else {
+                                boobal3.y -= 100 * modifier;
+                                if (boobal4.x > 110)
+                                    boobal4.x -= 100 * modifier;
+                                else {
+                                    if (pause4 > 0)
+                                        pause4 -= modifier;
+                                    else {
+                                        boobal4.y -= 100 * modifier;
+                                        musk.x += 100 * modifier;
+                                        bezos.x -= 100 * modifier;
+                                        if (bezos.x <= 350 && musk.x > 950) {
+                                            startScreen = false;
+                                            playing = true;
                                         }
                                     }
                                     //characters out and gameOn
@@ -215,59 +268,89 @@ var startAnimation = function (modifier) {
         }
     }
 };
+
+/********************************************************
+PAUSE GAME IF SPACE BAR PRESSED
+********************************************************/
+
+var pauseGame = function () {
+    if (!paused)
+    {
+        paused = true;
+        // pauseDiv elements visible
+        document.getElementById("cadrePause").style.display = "block";
+        document.getElementById("logoAppPause").style.display = "block";
+        document.getElementById("resultTextPause").style.display = "block";
+        document.getElementById("afterPausePlay").style.display = "block";
+
+    } else if (paused)
+    {
+        paused= false;
+        document.getElementById("cadrePause").style.display = "none";
+        document.getElementById("logoAppPause").style.display = "none";
+        document.getElementById("resultTextPause").style.display = "none";
+        document.getElementById("afterPausePlay").style.display = "none";
+    }
+
+}
+
 /********************************************************
 UPFATE GAME OBJECTS WHILE PLAYING
 ********************************************************/
 var update = function (modifier) {
+    //if spaceBar is pressed, we diplay the Pause div and pause the game
+    if (32 in keysDown) {
+        pauseGame();
+    }
+
     //if up key is pressed and rocket is stationary, go up 50
     if (38 in keysDown) {
-		if (redRocketStationary){
-            redRocketJump=20;
-            redRocketStationary=false;
+        if (redRocketStationary) {
+            redRocketJump = 20;
+            redRocketStationary = false;
         }
-	}
+    }
 
-    if(!redRocketStationary){
+    if (!redRocketStationary) {
         //go left
         if (37 in keysDown) {
-            redRocket.x -= redRocket.speed/2 * modifier;
+            redRocket.x -= redRocket.speed / 2 * modifier;
         }
 
         //go right
         if (39 in keysDown) {
-            redRocket.x += redRocket.speed/2 * modifier;
+            redRocket.x += redRocket.speed / 2 * modifier;
         }
     }
 
     //jump or fall or stay on platform
-    if(redRocketJump>0){
-        redRocket.y -= redRocket.speed * modifier * redRocketJump/10;
+    if (redRocketJump > 0) {
+        redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
         redRocketJump--;
-    }
-    else{
-        if(redRocketStationary)
-            redRocket.y=redRocket.y;
-        else{
+    } else {
+        if (redRocketStationary)
+            redRocket.y = redRocket.y;
+        else {
             redRocket.y += gravity * modifier;
         }
     }
 
     // is it in a platform
-	if ((touching(platform,redRocket) ||
-         touching(platform2,redRocket))
-        && redRocketJump==0) {
-		redRocketStationary=true;
-	}
+    if ((touching(platform, redRocket) ||
+            touching(platform2, redRocket)) &&
+        redRocketJump == 0) {
+        redRocketStationary = true;
+    }
 };
 
 /********************************************************
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
-var touching = function(platform,redrocket){
-    if(redRocket.y+redRocket.height>=platform.y-3
-        && redRocket.y+redRocket.height<=platform.y+3
-        && redRocket.x+redRocket.width>platform.x
-        && redRocket.x<platform.x+150)
+var touching = function (platform, redrocket) {
+    if (redRocket.y + redRocket.height >= platform.y - 3 &&
+        redRocket.y + redRocket.height <= platform.y + 3 &&
+        redRocket.x + redRocket.width > platform.x &&
+        redRocket.x < platform.x + 150)
         return true;
 }
 
@@ -275,44 +358,44 @@ var touching = function(platform,redrocket){
 DRAW EVERYTHING
 ********************************************************/
 var render = function () {
-	if (bgReady) {
-		ctx.drawImage(bgImage, 0, 0);
-	}
-
-    if (platformReady){
-     ctx.drawImage(platformImage,platform.x,platform.y,platform.width,platform.height);
-    ctx.drawImage(platformImage,platform2.x,platform2.y,platform.width,platform.height);
+    if (bgReady) {
+        ctx.drawImage(bgImage, 0, 0);
     }
 
-    if (redRocketImage){
-        ctx.drawImage(redRocketImage,redRocket.x,redRocket.y,redRocket.width,redRocket.height);
+    if (platformReady) {
+        ctx.drawImage(platformImage, platform.x, platform.y, platform.width, platform.height);
+        ctx.drawImage(platformImage, platform2.x, platform2.y, platform.width, platform.height);
     }
 
-    if (bezosReady){
-        ctx.drawImage(bezosImage,bezos.x,bezos.y,bezos.width,bezos.height);
-    }
-    if (muskReady){
-        ctx.drawImage(muskImage,musk.x,musk.y,musk.width,musk.height);
-    }
-    if (boobal1Ready){
-        ctx.drawImage(boobal1Image,boobal1.x,boobal1.y,boobal1.width,boobal1.height);
-    }
-    if (boobal2Ready){
-        ctx.drawImage(boobal2Image,boobal2.x,boobal2.y,boobal2.width,boobal2.height);
-    }
-    if (boobal3Ready){
-        ctx.drawImage(boobal3Image,boobal3.x,boobal3.y,boobal3.width,boobal3.height);
-    }
-    if (boobal4Ready){
-        ctx.drawImage(boobal4Image,boobal4.x,boobal4.y,boobal4.width,boobal4.height);
+    if (redRocketImage) {
+        ctx.drawImage(redRocketImage, redRocket.x, redRocket.y, redRocket.width, redRocket.height);
     }
 
-	// Score
-	ctx.fillStyle = "rgb(250, 250, 250)";
-	ctx.font = "24px Helvetica";
-	ctx.textAlign = "left";
-	ctx.textBaseline = "top";
-	ctx.fillText(points+" KM", 32, 32);
+    if (bezosReady) {
+        ctx.drawImage(bezosImage, bezos.x, bezos.y, bezos.width, bezos.height);
+    }
+    if (muskReady) {
+        ctx.drawImage(muskImage, musk.x, musk.y, musk.width, musk.height);
+    }
+    if (boobal1Ready) {
+        ctx.drawImage(boobal1Image, boobal1.x, boobal1.y, boobal1.width, boobal1.height);
+    }
+    if (boobal2Ready) {
+        ctx.drawImage(boobal2Image, boobal2.x, boobal2.y, boobal2.width, boobal2.height);
+    }
+    if (boobal3Ready) {
+        ctx.drawImage(boobal3Image, boobal3.x, boobal3.y, boobal3.width, boobal3.height);
+    }
+    if (boobal4Ready) {
+        ctx.drawImage(boobal4Image, boobal4.x, boobal4.y, boobal4.width, boobal4.height);
+    }
+
+    // Score
+    ctx.fillStyle = "rgb(250, 250, 250)";
+    ctx.font = "24px Helvetica";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText(points + " KM", 32, 32);
 };
 
 /********************************************************
@@ -321,7 +404,7 @@ Cross-browser support for requestAnimationFrame
 var w = window;
 requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
-var start = function(){
+var start = function () {
 
 }
 

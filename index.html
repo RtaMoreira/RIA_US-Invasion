@@ -53,7 +53,7 @@
     <div id="canvas-wrap">
         <script src="_javascript/game.js"></script>
         <div id="cadrePlacementStart" class="hiddenAfterClick">
-            <img id="logoApp" src="_ressources/logo/logo.ico">
+            <img id="logoAppStart" src="_ressources/logo/logo.ico">
             <form id="startForm">
                 <div class="fieldFormStart">
                 <img id="imgPlayer1" src="_ressources/logo/logoArrows/PlumeLogo.png">
@@ -74,9 +74,9 @@
         </div>
 
         <div id="cadrePause">
-            <img id="logoApp" src="_ressources/logo/logo.ico">
-            <h2 id="resultText">Game <br>paused !</h2>
-            <input type="button" value="PLAY" onclick="launchGame()">
+            <img id="logoAppPause" src="_ressources/logo/logo.ico">
+            <h2 id="resultTextPause">Game<br>paused !</h2>
+            <input id="afterPausePlay" type="button" value="PLAY" onclick="pauseGame()">
         </div>
 
     </div>
