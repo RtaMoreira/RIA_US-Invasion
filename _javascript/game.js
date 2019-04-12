@@ -11,6 +11,7 @@ var pause1 = 20;
 var pause2 = 20;
 var pause3 = 20;
 var pause4 = 20;
+var phase1 = false;
 
 /********************************************************
 Create the canvas
@@ -30,6 +31,7 @@ var launchGame = function(){
     player2 = document.getElementById("player2").value;
     document.getElementById("cadreStart").style.display="none";
     startScreen=true;
+    phase1=true;
 }
 //elements
 var muskReady = false;
@@ -65,6 +67,22 @@ boobal2Image.onload = function () {
 };
 boobal2Image.src = "_ressources/images/boobal2.png";
 var boobal2 = {y:300,x:1050,width:400,height:300};//x go to 110
+
+var boobal3Ready = false;
+var boobal3Image = new Image();
+boobal3Image.onload = function () {
+	boobal3Ready = true;
+};
+boobal3Image.src = "_ressources/images/boobal3.png";
+var boobal3 = {y:300,x:-400,width:400,height:300};//x go to 110
+
+var boobal4Ready = false;
+var boobal4Image = new Image();
+boobal4Image.onload = function () {
+	boobal4Ready = true;
+};
+boobal4Image.src = "_ressources/images/boobal4.png";
+var boobal4 = {y:300,x:1050,width:400,height:300};//x go to 110
 
 /********************************************************
 GAME OBJECTS
@@ -136,13 +154,19 @@ START ANIMATION
 ********************************************************/
 var startAnimation = function (modifier) {
     //characters appear
-    if(musk.x>310)
-        musk.x-=100*modifier;
-    if(bezos.x<0)
-        bezos.x+=100*modifier;
+    if(phase1){
+        if(musk.x>310)
+            musk.x-=100*modifier;
+        if(bezos.x<0)
+            bezos.x+=100*modifier;
+        if(bezos.x>=0 && musk.x<=310){
+            phase1=false;
+            console.log("salut");
+        }
+    }
 
     //do phase 2 (bubbles)
-    if(musk.x<=310 && bezos.x>=0){
+    if(!phase1){
         if(boobal1.x<110)
             boobal1.x+=100*modifier;
         else{
@@ -150,9 +174,42 @@ var startAnimation = function (modifier) {
                 pause1-=modifier;
             else{
                 //disapear text1 and appear text2
+                boobal1.y-=100*modifier;
                 if(boobal2.x>110)
                     boobal2.x-=100*modifier;
-                boobal1.y-=100*modifier;
+                else{
+                    if(pause2>0)
+                        pause2-=modifier;
+                    else{
+                        boobal2.y-=100*modifier;
+                        if(boobal3.x<110)
+                            boobal3.x+=100*modifier;
+                        else{
+                            if(pause3>0)
+                                pause3-=modifier;
+                            else{
+                                boobal3.y-=100*modifier;
+                                if(boobal4.x>110)
+                                    boobal4.x-=100*modifier;
+                                else{
+                                    if(pause4>0)
+                                        pause4-=modifier;
+                                    else{
+                                        boobal4.y-=100*modifier;
+                                        musk.x+=100*modifier;
+                                        bezos.x-=100*modifier;
+                                        if(bezos.x<=350 && musk.x>950){
+                                            startScreen=false;
+                                            playing=true;
+                                        }
+                                    }
+                                    //characters out and gameOn
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -241,6 +298,12 @@ var render = function () {
     }
     if (boobal2Ready){
         ctx.drawImage(boobal2Image,boobal2.x,boobal2.y,boobal2.width,boobal2.height);
+    }
+    if (boobal3Ready){
+        ctx.drawImage(boobal3Image,boobal3.x,boobal3.y,boobal3.width,boobal3.height);
+    }
+    if (boobal4Ready){
+        ctx.drawImage(boobal4Image,boobal4.x,boobal4.y,boobal4.width,boobal4.height);
     }
 
 	// Score
