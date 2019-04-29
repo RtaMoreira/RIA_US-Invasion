@@ -7,12 +7,16 @@ var player1 = "";
 var player2 = "";
 var playing = false;
 var startScreen = false;
+var endScreen = false;
 var pause1 = 20;
 var pause2 = 20;
 var pause3 = 20;
 var pause4 = 20;
 var phase1 = false;
 var paused = false;
+var platforms = [];
+var platformCount = 10;
+var position = 0;
 
 /********************************************************
 Create the canvas
@@ -129,26 +133,6 @@ bgImage.onload = function () {
 };
 bgImage.src = "_ressources/images/bg.png";
 
-// platform image
-var platformReady = false;
-var platformImage = new Image();
-platformImage.onload = function () {
-    platformReady = true;
-};
-platformImage.src = "_ressources/images/platform.png";
-var platform = {
-    x: 270,
-    y: 650,
-    width: 150,
-    height: 10
-};
-var platform2 = {
-    x: 270,
-    y: 400,
-    width: 150,
-    height: 10
-};
-
 // red Rocket image
 var redRocketReady = false;
 var redRocketImage = new Image();
@@ -161,10 +145,54 @@ var redRocket = {
     y: 750,
     x: 70,
     width: 100,
-    height: 100
+    height: 100,
+    isDead: false
 };
 var redRocketJump = 0;
 var redRocketStationary = true;
+
+/********************************************************
+PLATEFORMS GENERATION
+********************************************************/
+
+var platformReady = false;
+var platformImage = new Image();
+platformImage.onload = function () {
+    platformReady = true;
+};
+platformImage.src = "_ressources/images/platform_small.png";
+
+function Platform() {
+    this.width = 70;
+    this.height = 10;
+
+    this.x = Math.random() * (canvas.width - this.width);
+    this.y = position;
+
+
+    //to create platform each time lower than the previous one
+    position += (canvas.height / platformCount);
+
+
+    //Function to draw it
+    this.draw = function () {
+        try {
+            ctx.drawImage(platformImage, this.x, this.y, this.width, this.height);
+
+        } catch (e) {}
+    };
+};
+
+for (var i = 0; i < platformCount; i++) {
+    platforms.push(new Platform());
+    //1st platform always in the middle for start
+    if (i == platformCount - 1) {
+        platforms[i].x = (canvas.width / 2 - platforms[i].width / 2);
+        console.log(platforms[i]);
+    }
+};
+
+
 
 /********************************************************
 KEYBOARD LISTENER
@@ -190,12 +218,15 @@ var main = function () {
     if (startScreen)
         startAnimation(delta / 100);
 
-    if (playing){
+    if (playing) {
         document.getElementById("buttonSkip").style.display = "none";
-        if(!paused)
+        if (!paused)
             update(delta / 1000);
     }
 
+    if (endScreen) {
+        //Do  something...
+    }
 
     render();
 
@@ -274,12 +305,12 @@ var startAnimation = function (modifier) {
 /********************************************************
 SKIP ANIMATION ON CLICK
 ********************************************************/
-var skipAnimation = function(){
+var skipAnimation = function () {
     pause1 = -1;
     pause2 = -1;
     pause3 = -1;
     pause4 = -1;
-}
+};
 
 
 /********************************************************
@@ -287,8 +318,7 @@ PAUSE GAME IF SPACE BAR PRESSED
 ********************************************************/
 
 var pauseGame = function () {
-    if (!paused)
-    {
+    if (!paused) {
         paused = true;
         // pauseDiv elements visible
         document.getElementById("cadrePause").style.display = "block";
@@ -296,19 +326,18 @@ var pauseGame = function () {
         document.getElementById("resultTextPause").style.display = "block";
         document.getElementById("afterPausePlay").style.display = "block";
 
-    } else if (paused)
-    {
-        paused= false;
+    } else if (paused) {
+        paused = false;
         document.getElementById("cadrePause").style.display = "none";
         document.getElementById("logoAppPause").style.display = "none";
         document.getElementById("resultTextPause").style.display = "none";
         document.getElementById("afterPausePlay").style.display = "none";
     }
 
-}
+};
 
 /********************************************************
-UPFATE GAME OBJECTS WHILE PLAYING
+UPDATE GAME OBJECTS WHILE PLAYING
 ********************************************************/
 var update = function (modifier) {
     //if spaceBar is pressed, we diplay the Pause div and pause the game
@@ -348,12 +377,49 @@ var update = function (modifier) {
         }
     }
 
-    // is it in a platform
-    if ((touching(platform, redRocket) ||
-            touching(platform2, redRocket)) &&
-        redRocketJump == 0) {
-        redRocketStationary = true;
+    //check if rocket touches any platform
+    platforms.forEach(function (platform, i) {
+        if (touching(platform, redRocket) && redRocketJump == 0) {
+            redRocketStationary = true;
+        }
+    })
+
+    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas...
+    if (redRocket.y < (canvas.height / 2) - (redRocket.height / 2)) {
+
+        platforms.forEach(function (p, i) {
+
+            //plateforms goes down at new jump
+            if (redRocketJump <= 15) {
+                p.y += redRocket.speed * modifier * redRocketJump / 7;
+            }
+
+            //if platform goes past the canvas, create new one
+            if (p.y > canvas.height) {
+                platforms[i] = new Platform();
+                platforms[i].y = p.y - canvas.height;
+            }
+
+        });
+
+
+        points++;
     }
+
+
+    //if touch bottom, game over
+    if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
+        gameOver(redRocket); //looser as param
+    }
+
+    //(1)if touch border of canvas : game over
+  /*  if(redRocket.x + redRocket.width > canvas.width || redRocket.x < 0){
+        gameOver(redRocket);
+    }
+ */
+    //(2)if touch border of canvas : can move through walls
+    if(redRocket.x > canvas.width) redRocket.x = 0;
+    else if (redRocket.x < 0) redRocket.x = canvas.width;
 };
 
 /********************************************************
@@ -363,21 +429,46 @@ var touching = function (platform, redrocket) {
     if (redRocket.y + redRocket.height >= platform.y - 3 &&
         redRocket.y + redRocket.height <= platform.y + 3 &&
         redRocket.x + redRocket.width > platform.x &&
-        redRocket.x < platform.x + 150)
+        redRocket.x < platform.x + 70)
         return true;
+}
+
+
+/********************************************************
+GAME OVER
+********************************************************/
+function gameOver(looser) {
+
+    endScreen = true;
+    playing = false;
+    looser.isDead = "";
+
+    //show winner-looser and score, restart game?
+    showScore();
+
+}
+
+/*XXXXXXXXXXXXXXXXX Gestion du score, update du palmares à faire ! XXXXXXXXXXXXXXXXXXXXX*/
+function showScore() {
+    document.getElementById("cadrePause").style.display = "block";
+    document.getElementById("logoAppPause").style.display = "block";
+    document.getElementById("resultTextPause").style.display = "block";
+    document.getElementById("afterPausePlay").style.display = "block";
 }
 
 /********************************************************
 DRAW EVERYTHING
 ********************************************************/
 var render = function () {
+
     if (bgReady) {
         ctx.drawImage(bgImage, 0, 0);
     }
 
     if (platformReady) {
-        ctx.drawImage(platformImage, platform.x, platform.y, platform.width, platform.height);
-        ctx.drawImage(platformImage, platform2.x, platform2.y, platform.width, platform.height);
+        for (i = 0; i < platforms.length; i++) {
+            platforms[i].draw();
+        }
     }
 
     if (redRocketImage) {
