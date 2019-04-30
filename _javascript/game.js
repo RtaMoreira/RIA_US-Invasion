@@ -489,7 +489,7 @@ function updateScore(theWinner, thePoints) {
         cpt++;
     });
 
-    currentPalmares.splice(myValue+1,0,theWinner+'|'+thePoints);
+    currentPalmares.splice(myValue-1,0,theWinner+'|'+thePoints);
 
     localStorage.setItem("palmares", JSON.stringify(currentPalmares));
 
