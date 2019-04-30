@@ -84,7 +84,7 @@ SECOND
     margin-top: 13px;
 }
 
-#cadrePlacement, #cadrePause, #cadrePlacementStart{
+#cadrePlacement, #cadrePause, #cadrePlacementStart, #cadreEndgame{
     background-color: white;
     width: 300px;
     height: 400px;
@@ -98,7 +98,7 @@ SECOND
 
 /*,#cadrePause,#cadrePause>**/
 
-#cadrePlacement,#cadrePlacement>*,#cadrePause,#cadrePause>*{
+#cadrePlacement,#cadrePlacement>*,#cadrePause,#cadrePause>*,#cadreEndgame,#cadreEndgame>*{
     display: none;
 }
 
@@ -107,7 +107,7 @@ SECOND
 }
 
 
-#logoApp, #logoAppStart, #logoAppPause{
+#logoApp, #logoAppStart, #logoAppPause, #logoAppEndgame{
     width: 100px;
     height: 100px;
     margin-left: 95px;
@@ -180,7 +180,7 @@ input[type="button"]:focus, .inputPlayers:focus{
     margin-top: 210px;
 }
 
-#resultText, #resultTextPause{
+#resultText, #resultTextPause, #resultTextEndgame{
     color: black;
     text-align: center;
     margin-top: 40px;

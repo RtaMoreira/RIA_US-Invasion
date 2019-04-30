@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="icon" href="_ressources/logo/logo.ico">
 </head>
-<body>
+<body onload="displayScore();">
     <div id="first">
         <h2>INSTRUCTIONS</h2>
         <p>Soyez le premier à distancer votre adversaire !</p>
@@ -84,6 +84,12 @@
             <input id="afterPausePlay" type="button" value="PLAY" onclick="pauseGame()">
         </div>
 
+        <div id="cadreEndgame">
+            <img id="logoAppEndgame" src="_ressources/logo/logo.ico">
+            <h2 id="resultTextEndgame">Endgame !</h2>
+            <input id="afterEndgame" type="button" value="RESTART" onclick="window.location.reload();">
+        </div>
+
     </div>
 
 
@@ -91,26 +97,6 @@
     <div id="third">
         <h2>PALMARES</h2>
         <div id="palmares">
-            <div id="player1" class="player">
-                <div id="numero">1. JCFDSILVA</div>
-                <div id="score">100000pts</div>
-            </div>
-            <div id="player2" class="player">
-                <div id="numero">2. LICORNE</div>
-                <div id="score">12345pts</div>
-            </div>
-            <div id="player3" class="player">
-                <div id="numero">3. THEROUXGAY</div>
-                <div id="score">10009pts</div>
-            </div>
-            <div id="player4" class="player">
-                <div id="numero">4. FROUZE</div>
-                <div id="score">56pts</div>
-            </div>
-            <div id="player5" class="player">
-                <div id="numero">5. MARCO</div>
-                <div id="score">1pts</div>
-            </div>
         </div>
         <div class="buttonLink">
             <a href="https://bridyvivian.ch" target="_blank">

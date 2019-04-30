@@ -17,6 +17,7 @@ var paused = false;
 var platforms = [];
 var platformCount = 10;
 var position = 0;
+var palmares = [];
 
 /********************************************************
 Create the canvas
@@ -37,8 +38,14 @@ var launchGame = function () {
     document.getElementById("cadrePlacementStart").style.display = "none";
     document.getElementById("cadrePlacement").style.display = "none";
     document.getElementById("buttonSkip").style.display = "block";
+    //If we come from an other game
+    document.getElementById("cadreEndgame").style.display = "none";
     startScreen = true;
     phase1 = true;
+    if (localStorage.getItem("palmares") === null) { //if palmares is null we create it
+        localStorage.setItem("palmares", JSON.stringify(palmares));
+    }
+
 }
 
 //elements
@@ -146,7 +153,8 @@ var redRocket = {
     x: 70,
     width: 100,
     height: 100,
-    isDead: false
+    isDead: false,
+    player: 'player1'
 };
 var redRocketJump = 0;
 var redRocketStationary = true;
@@ -409,7 +417,7 @@ var update = function (modifier) {
 
     //if touch bottom, game over
     if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
-        gameOver(redRocket); //looser as param
+        gameOver(redRocket); //looser name as param
     }
 
     //(1)if touch border of canvas : game over
@@ -442,19 +450,71 @@ function gameOver(looser) {
     endScreen = true;
     playing = false;
     looser.isDead = "";
-
     //show winner-looser and score, restart game?
-    showScore();
+    if(looser.player === 'player1')
+        showScore(player2,player1); //winner-looser
+    else
+        showScore(player1,player2); //winner-looser
 
 }
 
 /*XXXXXXXXXXXXXXXXX Gestion du score, update du palmares à faire ! XXXXXXXXXXXXXXXXXXXXX*/
-function showScore() {
-    document.getElementById("cadrePause").style.display = "block";
-    document.getElementById("logoAppPause").style.display = "block";
-    document.getElementById("resultTextPause").style.display = "block";
-    document.getElementById("afterPausePlay").style.display = "block";
+function showScore(winner,looser) {
+    document.getElementById("cadreEndgame").style.display = "block";
+    document.getElementById("logoAppEndgame").style.display = "block";
+    document.getElementById("resultTextEndgame").innerHTML = looser+" <br>could not follow you!";
+    document.getElementById("resultTextEndgame").style.display = "block";
+    document.getElementById("afterEndgame").style.display = "block";
+
+    updateScore(winner, points);
+
+    displayScore();
 }
+
+/********************************************************
+HANDLE SCORES AND PALMARES
+********************************************************/
+function updateScore(theWinner, thePoints) {
+    var currentPalmares = JSON.parse(localStorage.getItem("palmares"));
+
+    var sizeCurrentPalmares = currentPalmares.length;
+
+    var myValue = 0;
+    var cpt = 0;
+    currentPalmares.forEach(function(element) {
+        var infoScore = element.split('|');
+        if(infoScore[1]<thePoints){
+            myValue = cpt;
+        }
+        cpt++;
+    });
+
+    currentPalmares.splice(myValue+1,0,theWinner+'|'+thePoints);
+
+    localStorage.setItem("palmares", JSON.stringify(currentPalmares));
+
+}
+
+function displayScore() {
+    var myPalmares = JSON.parse(localStorage.getItem("palmares"));
+
+    var theStatePalmares =  document.getElementById("palmares");
+    theStatePalmares.innerHTML = "";
+
+    var cpt = 1;
+    myPalmares.forEach(function(element) {
+        var infoScore = element.split('|');
+        var newScore = '<div id="player1" class="player"><div id="numero">'+cpt+'. '+infoScore[0]+'</div><div id="score">'+infoScore[1]+'pts</div></div>';
+        theStatePalmares.insertAdjacentHTML('beforeend',newScore);
+        cpt++;
+    });
+
+    //Just to remove the restart the palmares
+    //localStorage.removeItem("palmares");
+
+}
+
+
 
 /********************************************************
 DRAW EVERYTHING
