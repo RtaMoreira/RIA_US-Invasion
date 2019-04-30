@@ -2,7 +2,7 @@
 VARIABLES
 **********************************************************/
 var points = 0;
-var gravity = 350;
+var gravity = 500;
 var player1 = "";
 var player2 = "";
 var playing = false;
