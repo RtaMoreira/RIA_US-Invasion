@@ -173,7 +173,7 @@ var blueRocket = {
     width: 100,
     height: 100,
     isDead: false,
-    player: 'player1'
+    player: 'player2'
 };
 var blueRocketJump = 0;
 var blueRocketStationary = true;
