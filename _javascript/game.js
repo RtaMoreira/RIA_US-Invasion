@@ -159,6 +159,25 @@ var redRocket = {
 var redRocketJump = 0;
 var redRocketStationary = true;
 
+// blue Rocket image
+var blueRocketReady = false;
+var blueRocketImage = new Image();
+blueRocketImage.onload = function () {
+    blueRocketReady = true;
+};
+blueRocketImage.src = "_ressources/images/blueRocket.png";
+var blueRocket = {
+    speed: 800,
+    y: 750,
+    x: 430,
+    width: 100,
+    height: 100,
+    isDead: false,
+    player: 'player1'
+};
+var blueRocketJump = 0;
+var blueRocketStationary = true;
+
 /********************************************************
 PLATEFORMS GENERATION
 ********************************************************/
@@ -361,6 +380,14 @@ var update = function (modifier) {
         }
     }
 
+    //if W key is pressed and rocket is stationary, go up 50
+    if (87 in keysDown) {
+        if (blueRocketStationary) {
+            blueRocketJump = 20;
+            blueRocketStationary = false;
+        }
+    }
+
     if (!redRocketStationary) {
         //go left
         if (37 in keysDown) {
@@ -373,7 +400,19 @@ var update = function (modifier) {
         }
     }
 
-    //jump or fall or stay on platform
+     if (!blueRocketStationary) {
+        //go left
+        if (65 in keysDown) {
+            blueRocket.x -= blueRocket.speed / 2 * modifier;
+        }
+
+        //go right
+        if (68 in keysDown) {
+            blueRocket.x += blueRocket.speed / 2 * modifier;
+        }
+    }
+
+    //jump or fall or stay on platform (redrocket)
     if (redRocketJump > 0) {
         redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
         redRocketJump--;
@@ -385,14 +424,29 @@ var update = function (modifier) {
         }
     }
 
+    //jump or fall or stay on platform (bluerocket)
+    if (blueRocketJump > 0) {
+        blueRocket.y -= blueRocket.speed * modifier * blueRocketJump / 10;
+        blueRocketJump--;
+    } else {
+        if (blueRocketStationary)
+            blueRocket.y = blueRocket.y;
+        else {
+            blueRocket.y += gravity * modifier;
+        }
+    }
+
     //check if rocket touches any platform
     platforms.forEach(function (platform, i) {
         if (touching(platform, redRocket) && redRocketJump == 0) {
             redRocketStationary = true;
         }
+        if (touching(platform, blueRocket) && blueRocketJump == 0) {
+            blueRocketStationary = true;
+        }
     })
 
-    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas...
+    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
     if (redRocket.y < (canvas.height / 2) - (redRocket.height / 2)) {
 
         platforms.forEach(function (p, i) {
@@ -414,10 +468,37 @@ var update = function (modifier) {
         points++;
     }
 
+    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (bluerocket)
+    if (blueRocket.y < (canvas.height / 2) - (blueRocket.height / 2)) {
 
-    //if touch bottom, game over
+        platforms.forEach(function (p, i) {
+
+            //plateforms goes down at new jump
+            if (blueRocketJump <= 15) {
+                p.y += blueRocket.speed * modifier * redRocketJump / 7;
+            }
+
+            //if platform goes past the canvas, create new one
+            if (p.y > canvas.height) {
+                platforms[i] = new Platform();
+                platforms[i].y = p.y - canvas.height;
+            }
+
+        });
+
+
+        points++;
+    }
+
+
+    //if touch bottom, game over (redrocket)
     if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
         gameOver(redRocket); //looser name as param
+    }
+
+    //if touch bottom, game over (bluerocket)
+    if (blueRocket.y + blueRocket.height > canvas.height + blueRocket.height) {
+        gameOver(blueRocket); //looser name as param
     }
 
     //(1)if touch border of canvas : game over
@@ -428,16 +509,20 @@ var update = function (modifier) {
     //(2)if touch border of canvas : can move through walls
     if(redRocket.x > canvas.width) redRocket.x = 0;
     else if (redRocket.x < 0) redRocket.x = canvas.width;
+
+    //(2)if touch border of canvas : can move through walls
+    if(blueRocket.x > canvas.width) blueRocket.x = 0;
+    else if (blueRocket.x < 0) blueRocket.x = canvas.width;
 };
 
 /********************************************************
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
-var touching = function (platform, redrocket) {
-    if (redRocket.y + redRocket.height >= platform.y - 3 &&
-        redRocket.y + redRocket.height <= platform.y + 3 &&
-        redRocket.x + redRocket.width > platform.x &&
-        redRocket.x < platform.x + 70)
+var touching = function (platform, rocket) {
+    if (rocket.y + rocket.height >= platform.y - 3 &&
+        rocket.y + rocket.height <= platform.y + 3 &&
+        rocket.x + rocket.width > platform.x &&
+        rocket.x < platform.x + 70)
         return true;
 }
 
@@ -540,6 +625,10 @@ var render = function () {
 
     if (redRocketImage) {
         ctx.drawImage(redRocketImage, redRocket.x, redRocket.y, redRocket.width, redRocket.height);
+    }
+
+    if (blueRocketImage) {
+        ctx.drawImage(blueRocketImage, blueRocket.x, blueRocket.y, blueRocket.width, blueRocket.height);
     }
 
     if (bezosReady) {
