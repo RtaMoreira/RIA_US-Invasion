@@ -477,19 +477,24 @@ HANDLE SCORES AND PALMARES
 function updateScore(theWinner, thePoints) {
     var currentPalmares = JSON.parse(localStorage.getItem("palmares"));
 
-    var sizeCurrentPalmares = currentPalmares.length;
-
-    var myValue = 0;
+    var myValue = currentPalmares.length;
     var cpt = 0;
+    var isSet = false;
     currentPalmares.forEach(function(element) {
         var infoScore = element.split('|');
-        if(infoScore[1]<thePoints){
+        console.log("infoScore : "+infoScore[1]+" | thePoints :"+thePoints);
+
+        if(infoScore[1]<thePoints && !isSet){
+            console.log("coucou de l'intérieur du if");
             myValue = cpt;
+            isSet = true;
         }
         cpt++;
     });
 
-    currentPalmares.splice(myValue-1,0,theWinner+'|'+thePoints);
+    console.log("myValue :"+ myValue);
+
+    currentPalmares.splice(myValue,0,theWinner+'|'+thePoints);
 
     localStorage.setItem("palmares", JSON.stringify(currentPalmares));
 
