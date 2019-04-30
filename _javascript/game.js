@@ -508,10 +508,12 @@ function displayScore() {
 
     var cpt = 1;
     myPalmares.forEach(function(element) {
-        var infoScore = element.split('|');
-        var newScore = '<div id="player1" class="player"><div id="numero">'+cpt+'. '+infoScore[0]+'</div><div id="score">'+infoScore[1]+'pts</div></div>';
-        theStatePalmares.insertAdjacentHTML('beforeend',newScore);
-        cpt++;
+        if(cpt<=9){
+            var infoScore = element.split('|');
+            var newScore = '<div id="player1" class="player"><div id="numero">'+cpt+'. '+infoScore[0]+'</div><div id="score">'+infoScore[1]+'pts</div></div>';
+            theStatePalmares.insertAdjacentHTML('beforeend',newScore);
+            cpt++;
+        }
     });
 
     //Just to remove the restart the palmares
@@ -561,7 +563,7 @@ var render = function () {
 
     // Score
     ctx.fillStyle = "rgb(250, 250, 250)";
-    ctx.font = "24px Helvetica";
+    ctx.font = "18px 'Press Start 2P'";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText(points + " KM", 32, 32);
