@@ -190,7 +190,7 @@ platformImage.onload = function () {
 platformImage.src = "_ressources/images/platform_small.png";
 
 function Platform() {
-    this.width = 70;
+    this.width = 100;
     this.height = 10;
 
     this.x = Math.random() * (canvas.width - this.width);
@@ -463,7 +463,7 @@ var update = function (modifier) {
     //if W key is pressed and rocket is stationary, go up 50
     else if (87 in keysDown) {
         if (redRocketStationary) {
-            redRocketJump = 20;
+            redRocketJump = 16;
             redRocketStationary = false;
         }
     }
@@ -471,7 +471,7 @@ var update = function (modifier) {
     //if up key is pressed and rocket is stationary, go up 50
     else if (38 in keysDown) {
         if (blueRocketStationary) {
-            blueRocketJump = 20;
+            blueRocketJump = 16;
             blueRocketStationary = false;
         }
     }
