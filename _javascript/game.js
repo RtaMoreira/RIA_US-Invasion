@@ -368,6 +368,17 @@ UPDATE GAME OBJECTS WHILE PLAYING
 ********************************************************/
 var update = function (modifier) {
 
+    //check if rocket touches any platform
+    platforms.forEach(function (platform, i) {
+        if (touching(platform, redRocket) && redRocketJump == 0) {
+            redRocketStationary = true;
+        }
+        if (touching(platform, blueRocket) && blueRocketJump == 0) {
+            blueRocketStationary = true;
+        }
+    })
+
+
     //jump or fall or stay on platform (redrocket)
     if (redRocketJump > 0) {
         redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
@@ -392,16 +403,6 @@ var update = function (modifier) {
         }
     }
 
-    //check if rocket touches any platform
-    platforms.forEach(function (platform, i) {
-        if (touching(platform, redRocket) && redRocketJump == 0) {
-            redRocketStationary = true;
-        }
-        if (touching(platform, blueRocket) && blueRocketJump == 0) {
-            blueRocketStationary = true;
-        }
-    })
-
     //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
     if (redRocket.y < (canvas.height / 2) - (redRocket.height / 2)) {
 
@@ -412,6 +413,7 @@ var update = function (modifier) {
             //plateforms goes down at new jump
             if (redRocketJump <= 15) {
                 p.y += deplacement;
+                points += redRocketJump;
 
             }
 
@@ -426,52 +428,6 @@ var update = function (modifier) {
         //other rocket goes down by the same amount as the platforms
         blueRocket.y += deplacement;
 
-        points++;
-    }
-
-    //if spaceBar is pressed, we diplay the Pause div and pause the game
-    if (32 in keysDown) {
-        pauseGame();
-    }
-
-    //if W key is pressed and rocket is stationary, go up 50
-    if (87 in keysDown) {
-        if (redRocketStationary) {
-            redRocketJump = 20;
-            redRocketStationary = false;
-        }
-    }
-
-    //if up key is pressed and rocket is stationary, go up 50
-    if (38 in keysDown) {
-        if (blueRocketStationary) {
-            blueRocketJump = 20;
-            blueRocketStationary = false;
-        }
-    }
-
-    if (!redRocketStationary) {
-        //go left
-        if (65 in keysDown) {
-            redRocket.x -= redRocket.speed / 2 * modifier;
-        }
-
-        //go right
-        if (68 in keysDown) {
-            redRocket.x += redRocket.speed / 2 * modifier;
-        }
-    }
-
-     if (!blueRocketStationary) {
-        //go left
-        if (37 in keysDown) {
-            blueRocket.x -= blueRocket.speed / 2 * modifier;
-        }
-
-        //go right
-        if (39 in keysDown) {
-            blueRocket.x += blueRocket.speed / 2 * modifier;
-        }
     }
 
     //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (bluerocket)
@@ -497,12 +453,57 @@ var update = function (modifier) {
         //other rocket goes down by the same amount as the platforms
         redRocket.y += deplacement;
 
-        points++;
+    }
+
+    //if spaceBar is pressed, we diplay the Pause div and pause the game
+    if (32 in keysDown) {
+        pauseGame();
+    }
+
+    //if W key is pressed and rocket is stationary, go up 50
+    else if (87 in keysDown) {
+        if (redRocketStationary) {
+            redRocketJump = 20;
+            redRocketStationary = false;
+        }
+    }
+
+    //if up key is pressed and rocket is stationary, go up 50
+    else if (38 in keysDown) {
+        if (blueRocketStationary) {
+            blueRocketJump = 20;
+            blueRocketStationary = false;
+        }
+    }
+
+    if (!redRocketStationary) {
+        //go left
+        if (65 in keysDown) {
+            redRocket.x -= redRocket.speed / 2 * modifier;
+        }
+
+        //go right
+        else if (68 in keysDown) {
+            redRocket.x += redRocket.speed / 2 * modifier;
+        }
+    }
+
+    if (!blueRocketStationary) {
+        //go left
+        if (37 in keysDown) {
+            blueRocket.x -= blueRocket.speed / 2 * modifier;
+        }
+
+        //go right
+        else if (39 in keysDown) {
+            blueRocket.x += blueRocket.speed / 2 * modifier;
+        }
     }
 
 
+
     //if touch bottom, game over (redrocket)
-    if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
+ /*   if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
         gameOver(redRocket); //looser name as param
     }
 
@@ -510,18 +511,13 @@ var update = function (modifier) {
     if (blueRocket.y + blueRocket.height > canvas.height + blueRocket.height) {
         gameOver(blueRocket); //looser name as param
     }
-
-    //(1)if touch border of canvas : game over
-  /*  if(redRocket.x + redRocket.width > canvas.width || redRocket.x < 0){
-        gameOver(redRocket);
-    }
- */
-    //(2)if touch border of canvas : can move through walls
-    if(redRocket.x > canvas.width) redRocket.x = 0;
+*/
+    //if touch border of canvas : can move through walls
+    if (redRocket.x > canvas.width) redRocket.x = 0;
     else if (redRocket.x < 0) redRocket.x = canvas.width;
 
-    //(2)if touch border of canvas : can move through walls
-    if(blueRocket.x > canvas.width) blueRocket.x = 0;
+    //if touch border of canvas : can move through walls
+    if (blueRocket.x > canvas.width) blueRocket.x = 0;
     else if (blueRocket.x < 0) blueRocket.x = canvas.width;
 };
 
@@ -546,18 +542,18 @@ function gameOver(looser) {
     playing = false;
     looser.isDead = "";
     //show winner-looser and score, restart game?
-    if(looser.player === 'player1')
-        showScore(player2,player1); //winner-looser
+    if (looser.player === 'player1')
+        showScore(player2, player1); //winner-looser
     else
-        showScore(player1,player2); //winner-looser
+        showScore(player1, player2); //winner-looser
 
 }
 
 /*XXXXXXXXXXXXXXXXX Gestion du score, update du palmares à faire ! XXXXXXXXXXXXXXXXXXXXX*/
-function showScore(winner,looser) {
+function showScore(winner, looser) {
     document.getElementById("cadreEndgame").style.display = "block";
     document.getElementById("logoAppEndgame").style.display = "block";
-    document.getElementById("resultTextEndgame").innerHTML = looser+" <br>could not follow!";
+    document.getElementById("resultTextEndgame").innerHTML = looser + " <br>could not follow!";
     document.getElementById("resultTextEndgame").style.display = "block";
     document.getElementById("afterEndgame").style.display = "block";
 
@@ -575,11 +571,11 @@ function updateScore(theWinner, thePoints) {
     var myValue = currentPalmares.length;
     var cpt = 0;
     var isSet = false;
-    currentPalmares.forEach(function(element) {
+    currentPalmares.forEach(function (element) {
         var infoScore = element.split('|');
-        console.log("infoScore : "+infoScore[1]+" | thePoints :"+thePoints);
+        console.log("infoScore : " + infoScore[1] + " | thePoints :" + thePoints);
 
-        if(infoScore[1]<thePoints && !isSet){
+        if (infoScore[1] < thePoints && !isSet) {
             console.log("coucou de l'intérieur du if");
             myValue = cpt;
             isSet = true;
@@ -587,9 +583,9 @@ function updateScore(theWinner, thePoints) {
         cpt++;
     });
 
-    console.log("myValue :"+ myValue);
+    console.log("myValue :" + myValue);
 
-    currentPalmares.splice(myValue,0,theWinner+'|'+thePoints);
+    currentPalmares.splice(myValue, 0, theWinner + '|' + thePoints);
 
     localStorage.setItem("palmares", JSON.stringify(currentPalmares));
 
@@ -598,15 +594,15 @@ function updateScore(theWinner, thePoints) {
 function displayScore() {
     var myPalmares = JSON.parse(localStorage.getItem("palmares"));
 
-    var theStatePalmares =  document.getElementById("palmares");
+    var theStatePalmares = document.getElementById("palmares");
     theStatePalmares.innerHTML = "";
 
     var cpt = 1;
-    myPalmares.forEach(function(element) {
-        if(cpt<=9){
+    myPalmares.forEach(function (element) {
+        if (cpt <= 9) {
             var infoScore = element.split('|');
-            var newScore = '<div id="player1" class="player"><div id="numero">'+cpt+'. '+infoScore[0]+'</div><div id="score">'+infoScore[1]+'pts</div></div>';
-            theStatePalmares.insertAdjacentHTML('beforeend',newScore);
+            var newScore = '<div id="player1" class="player"><div id="numero">' + cpt + '. ' + infoScore[0] + '</div><div id="score">' + infoScore[1] + 'pts</div></div>';
+            theStatePalmares.insertAdjacentHTML('beforeend', newScore);
             cpt++;
         }
     });
