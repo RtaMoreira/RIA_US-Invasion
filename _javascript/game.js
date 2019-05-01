@@ -367,50 +367,6 @@ var pauseGame = function () {
 UPDATE GAME OBJECTS WHILE PLAYING
 ********************************************************/
 var update = function (modifier) {
-    //if spaceBar is pressed, we diplay the Pause div and pause the game
-    if (32 in keysDown) {
-        pauseGame();
-    }
-
-    //if W key is pressed and rocket is stationary, go up 50
-    if (87 in keysDown) {
-        if (redRocketStationary) {
-            redRocketJump = 20;
-            redRocketStationary = false;
-        }
-    }
-
-    //if up key is pressed and rocket is stationary, go up 50
-    if (38 in keysDown) {
-        if (blueRocketStationary) {
-            blueRocketJump = 20;
-            blueRocketStationary = false;
-        }
-    }
-
-    if (!redRocketStationary) {
-        //go left
-        if (65 in keysDown) {
-            redRocket.x -= redRocket.speed / 2 * modifier;
-        }
-
-        //go right
-        if (68 in keysDown) {
-            redRocket.x += redRocket.speed / 2 * modifier;
-        }
-    }
-
-     if (!blueRocketStationary) {
-        //go left
-        if (37 in keysDown) {
-            blueRocket.x -= blueRocket.speed / 2 * modifier;
-        }
-
-        //go right
-        if (39 in keysDown) {
-            blueRocket.x += blueRocket.speed / 2 * modifier;
-        }
-    }
 
     //jump or fall or stay on platform (redrocket)
     if (redRocketJump > 0) {
@@ -471,6 +427,51 @@ var update = function (modifier) {
         blueRocket.y += deplacement;
 
         points++;
+    }
+
+    //if spaceBar is pressed, we diplay the Pause div and pause the game
+    if (32 in keysDown) {
+        pauseGame();
+    }
+
+    //if W key is pressed and rocket is stationary, go up 50
+    if (87 in keysDown) {
+        if (redRocketStationary) {
+            redRocketJump = 20;
+            redRocketStationary = false;
+        }
+    }
+
+    //if up key is pressed and rocket is stationary, go up 50
+    if (38 in keysDown) {
+        if (blueRocketStationary) {
+            blueRocketJump = 20;
+            blueRocketStationary = false;
+        }
+    }
+
+    if (!redRocketStationary) {
+        //go left
+        if (65 in keysDown) {
+            redRocket.x -= redRocket.speed / 2 * modifier;
+        }
+
+        //go right
+        if (68 in keysDown) {
+            redRocket.x += redRocket.speed / 2 * modifier;
+        }
+    }
+
+     if (!blueRocketStationary) {
+        //go left
+        if (37 in keysDown) {
+            blueRocket.x -= blueRocket.speed / 2 * modifier;
+        }
+
+        //go right
+        if (39 in keysDown) {
+            blueRocket.x += blueRocket.speed / 2 * modifier;
+        }
     }
 
     //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (bluerocket)
