@@ -372,16 +372,16 @@ var update = function (modifier) {
         pauseGame();
     }
 
-    //if up key is pressed and rocket is stationary, go up 50
-    if (38 in keysDown) {
+    //if W key is pressed and rocket is stationary, go up 50
+    if (87 in keysDown) {
         if (redRocketStationary) {
             redRocketJump = 20;
             redRocketStationary = false;
         }
     }
 
-    //if W key is pressed and rocket is stationary, go up 50
-    if (87 in keysDown) {
+    //if up key is pressed and rocket is stationary, go up 50
+    if (38 in keysDown) {
         if (blueRocketStationary) {
             blueRocketJump = 20;
             blueRocketStationary = false;
@@ -390,24 +390,24 @@ var update = function (modifier) {
 
     if (!redRocketStationary) {
         //go left
-        if (37 in keysDown) {
+        if (65 in keysDown) {
             redRocket.x -= redRocket.speed / 2 * modifier;
         }
 
         //go right
-        if (39 in keysDown) {
+        if (68 in keysDown) {
             redRocket.x += redRocket.speed / 2 * modifier;
         }
     }
 
      if (!blueRocketStationary) {
         //go left
-        if (65 in keysDown) {
+        if (37 in keysDown) {
             blueRocket.x -= blueRocket.speed / 2 * modifier;
         }
 
         //go right
-        if (68 in keysDown) {
+        if (39 in keysDown) {
             blueRocket.x += blueRocket.speed / 2 * modifier;
         }
     }
@@ -449,11 +449,14 @@ var update = function (modifier) {
     //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
     if (redRocket.y < (canvas.height / 2) - (redRocket.height / 2)) {
 
+        var deplacement = redRocket.speed * modifier * redRocketJump / 7;
+
         platforms.forEach(function (p, i) {
 
             //plateforms goes down at new jump
             if (redRocketJump <= 15) {
-                p.y += redRocket.speed * modifier * redRocketJump / 7;
+                p.y += deplacement;
+
             }
 
             //if platform goes past the canvas, create new one
@@ -464,6 +467,8 @@ var update = function (modifier) {
 
         });
 
+        //other rocket goes down by the same amount as the platforms
+        blueRocket.y += deplacement;
 
         points++;
     }
@@ -471,11 +476,13 @@ var update = function (modifier) {
     //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (bluerocket)
     if (blueRocket.y < (canvas.height / 2) - (blueRocket.height / 2)) {
 
+        var deplacement = blueRocket.speed * modifier * blueRocketJump / 7;
+
         platforms.forEach(function (p, i) {
 
             //plateforms goes down at new jump
             if (blueRocketJump <= 15) {
-                p.y += blueRocket.speed * modifier * redRocketJump / 7;
+                p.y += deplacement
             }
 
             //if platform goes past the canvas, create new one
@@ -486,6 +493,8 @@ var update = function (modifier) {
 
         });
 
+        //other rocket goes down by the same amount as the platforms
+        redRocket.y += deplacement;
 
         points++;
     }
@@ -547,7 +556,7 @@ function gameOver(looser) {
 function showScore(winner,looser) {
     document.getElementById("cadreEndgame").style.display = "block";
     document.getElementById("logoAppEndgame").style.display = "block";
-    document.getElementById("resultTextEndgame").innerHTML = looser+" <br>could not follow you!";
+    document.getElementById("resultTextEndgame").innerHTML = looser+" <br>could not follow!";
     document.getElementById("resultTextEndgame").style.display = "block";
     document.getElementById("afterEndgame").style.display = "block";
 
