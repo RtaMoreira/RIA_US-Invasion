@@ -521,14 +521,14 @@ var update = function (modifier) {
     else if (blueRocket.x < 0) blueRocket.x = canvas.width;
 };
 
-/*********************************************************
+/********************************************************
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
 var touching = function (platform, rocket) {
-    if ((rocket.y + rocket.height) >= (platform.y - 3) &&
-        (rocket.y + rocket.height) <= (platform.y + 3) &&
-        (rocket.x + rocket.width) > platform.x &&
-        rocket.x < (platform.x + 70))
+    if (!((rocket.y + rocket.height) < (platform.y - 3) ||
+        (rocket.y + rocket.height) > (platform.y + 3) ||
+        (rocket.x + rocket.width) <= platform.x ||
+        rocket.x >= (platform.x + 70)))
         return true;
 }
 
