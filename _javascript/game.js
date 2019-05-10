@@ -370,10 +370,10 @@ var update = function (modifier) {
 
     //check if rocket touches any platform
     platforms.forEach(function (platform, i) {
-        if (touching(platform, redRocket) && redRocketJump == 0) {
+        if (redRocketJump == 0 && touching(platform, redRocket)) {
             redRocketStationary = true;
         }
-        if (touching(platform, blueRocket) && blueRocketJump == 0) {
+        if (blueRocketJump == 0 && touching(platform, blueRocket)) {
             blueRocketStationary = true;
         }
     })
@@ -521,14 +521,14 @@ var update = function (modifier) {
     else if (blueRocket.x < 0) blueRocket.x = canvas.width;
 };
 
-/********************************************************
+/*********************************************************
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
 var touching = function (platform, rocket) {
-    if (rocket.y + rocket.height >= platform.y - 3 &&
-        rocket.y + rocket.height <= platform.y + 3 &&
-        rocket.x + rocket.width > platform.x &&
-        rocket.x < platform.x + 70)
+    if ((rocket.y + rocket.height) >= (platform.y - 3) &&
+        (rocket.y + rocket.height) <= (platform.y + 3) &&
+        (rocket.x + rocket.width) > platform.x &&
+        rocket.x < (platform.x + 70))
         return true;
 }
 
