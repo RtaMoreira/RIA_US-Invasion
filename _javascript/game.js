@@ -15,7 +15,10 @@ var pause4 = 20;
 var phase1 = false;
 var paused = false;
 var platforms = [];
-var platformCount = 10;
+var platformCount = 15;
+var movingPlatform;
+var redDeplacement;
+var blueDeplacement;
 var position = 0;
 var palmares = [];
 
@@ -150,7 +153,7 @@ redRocketImage.src = "_ressources/images/redRocket.png";
 var redRocket = {
     speed: 800,
     y: 750,
-    x: 70,
+    x: 170,
     width: 100,
     height: 100,
     isDead: false,
@@ -169,7 +172,7 @@ blueRocketImage.src = "_ressources/images/blueRocket.png";
 var blueRocket = {
     speed: 800,
     y: 750,
-    x: 430,
+    x: 330,
     width: 100,
     height: 100,
     isDead: false,
@@ -192,6 +195,11 @@ platformImage.src = "_ressources/images/platform_small.png";
 function Platform() {
     this.width = 100;
     this.height = 10;
+    this.speed = 0;
+    //for moving platform
+    if (movingPlatform) {
+        this.speed = 2;
+    }
 
     this.x = Math.random() * (canvas.width - this.width);
     this.y = position;
@@ -210,14 +218,26 @@ function Platform() {
     };
 };
 
-for (var i = 0; i < platformCount; i++) {
-    platforms.push(new Platform());
+//first platform at the beginning of the array (first to be tested)
+for (var i = platformCount - 1; i >= 0; i--) {
+    platforms[i] = (new Platform());
     //1st platform always in the middle for start
-    if (i == platformCount - 1) {
+    if (i == 0) {
         platforms[i].x = (canvas.width / 2 - platforms[i].width / 2);
-        console.log(platforms[i]);
     }
 };
+
+//Calculation for the moving platforms
+function platformCalc() {
+    platforms.forEach(function (p, i) {
+        if (p.speed != 0) {
+            if (p.x + p.width > canvas.width) p.speed = -2; //other
+            else if (p.x < 0) p.speed = 2;
+
+            p.x += p.speed;
+        }
+    });
+}
 
 
 
@@ -247,12 +267,10 @@ var main = function () {
 
     if (playing) {
         document.getElementById("buttonSkip").style.display = "none";
-        if (!paused)
+        if (!paused) {
             update(delta / 1000);
-    }
-
-    if (endScreen) {
-        //Do  something...
+            platformCalc();
+        }
     }
 
     render();
@@ -368,15 +386,32 @@ UPDATE GAME OBJECTS WHILE PLAYING
 ********************************************************/
 var update = function (modifier) {
 
-    //check if rocket touches any platform
-    platforms.forEach(function (platform, i) {
-        if (redRocketJump == 0 && touching(platform, redRocket)) {
-            redRocketStationary = true;
-        }
-        if (blueRocketJump == 0 && touching(platform, blueRocket)) {
-            blueRocketStationary = true;
-        }
-    })
+    //check if rocket touches any platform (only when falling)
+    if (redRocketJump == 0) {
+        platforms.forEach(function (platform, i) {
+
+            if (touching(platform, redRocket)) {
+                redRocketStationary = true;
+                if (platform.speed != 0) //moving platform
+                {
+                    redRocket.x += platform.speed;
+                }
+            }
+        })
+    }
+
+    if (blueRocketJump == 0) {
+        platforms.forEach(function (platform, i) {
+
+            if (touching(platform, blueRocket)) {
+                blueRocketStationary = true;
+                if (platform.speed != 0) //moving platform
+                {
+                    blueRocket.x += platform.speed;
+                }
+            }
+        })
+    }
 
 
     //jump or fall or stay on platform (redrocket)
@@ -404,54 +439,88 @@ var update = function (modifier) {
     }
 
     //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
-    if (redRocket.y < (canvas.height / 2) - (redRocket.height / 2)) {
+    if (redRocket.y < (canvas.height / 2) - (redRocket.height + 100)) {
 
-        var deplacement = redRocket.speed * modifier * redRocketJump / 7;
+        if (redRocketJump >= 15)
+            redDeplacement = redRocket.speed * redRocketJump * modifier / 8;
+        else
+            redDeplacement = gravity * modifier;
 
-        platforms.forEach(function (p, i) {
-
+        for (var i = platformCount - 1; i >= 0; i--) {
             //plateforms goes down at new jump
             if (redRocketJump <= 15) {
-                p.y += deplacement;
-                points += redRocketJump;
-
+                platforms[i].y += redDeplacement;
+                points += Math.round(redRocketJump / 10);
             }
 
             //if platform goes past the canvas, create new one
-            if (p.y > canvas.height) {
+            if (platforms[i].y > canvas.height) {
+
+                //random calcul to determine if moving or normal platform
+                var randomValue = Math.round(Math.random() * 10);
+                console.log("RANDOM red" + randomValue);
+
+                if (points > 1000) { //only moving platform (10000)
+                    movingPlatform = true;
+                } else if (points > 2000 && points <= 4000) {
+                    if (randomValue < 7) movingPlatform = true;
+                } else if (points > 1000 && points <= 2000) {
+                    if (randomValue < 3) movingPlatform = true;
+                } else if (points > 500 && points <= 1000) {
+                    if (randomValue < 1) movingPlatform = true;
+                }
                 platforms[i] = new Platform();
-                platforms[i].y = p.y - canvas.height;
+                platforms[i].y = 0;
+                randomValue = false; //reset randomValue for next platform
+
             }
-
-        });
-
+        }
         //other rocket goes down by the same amount as the platforms
-        blueRocket.y += deplacement;
+        blueRocket.y += redDeplacement;
+        redRocket.y += redDeplacement;
 
     }
 
-    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (bluerocket)
-    if (blueRocket.y < (canvas.height / 2) - (blueRocket.height / 2)) {
+    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
+    if (blueRocket.y < (canvas.height / 2) - (blueRocket.height + 100)) {
 
-        var deplacement = blueRocket.speed * modifier * blueRocketJump / 7;
+        if (blueRocketJump >= 15)
+            blueDeplacement = blueRocket.speed * blueRocketJump * modifier / 8;
+        else
+            blueDeplacement = gravity * modifier;
 
-        platforms.forEach(function (p, i) {
-
+        for (var i = platformCount - 1; i >= 0; i--) {
             //plateforms goes down at new jump
             if (blueRocketJump <= 15) {
-                p.y += deplacement
+                platforms[i].y += blueDeplacement;
+                points += Math.round(blueRocketJump / 10);
             }
+
 
             //if platform goes past the canvas, create new one
-            if (p.y > canvas.height) {
+            if (platforms[i].y > canvas.height) {
+                //random calcul to determine if moving or normal platform
+                var randomValue = Math.round(Math.random() * 10);
+                console.log("RANDOM blue " + randomValue);
+
+                if (points > 1000) { //only moving platform
+                    movingPlatform = true;
+                } else if (points > 700 && points <= 1000) {
+                    if (randomValue < 7) movingPlatform = true;
+                } else if (points > 400 && points <= 700) {
+                    if (randomValue < 3) movingPlatform = true;
+                } else if (points > 200 && points <= 400) {
+                    if (randomValue < 1) movingPlatform = true;
+                }
                 platforms[i] = new Platform();
-                platforms[i].y = p.y - canvas.height;
+                platforms[i].y = 0;
+                randomValue = false; //reset randomValue for next platform
+
             }
-
-        });
-
+        }
         //other rocket goes down by the same amount as the platforms
-        redRocket.y += deplacement;
+        redRocket.y += blueDeplacement;
+        blueRocket.y += blueDeplacement;
 
     }
 
@@ -460,8 +529,7 @@ var update = function (modifier) {
         pauseGame();
     }
 
-    //if W key is pressed and rocket is stationary, go up 50
-    else if (87 in keysDown) {
+    if (87 in keysDown) {
         if (redRocketStationary) {
             redRocketJump = 16;
             redRocketStationary = false;
@@ -469,7 +537,7 @@ var update = function (modifier) {
     }
 
     //if up key is pressed and rocket is stationary, go up 50
-    else if (38 in keysDown) {
+    if (38 in keysDown) {
         if (blueRocketStationary) {
             blueRocketJump = 16;
             blueRocketStationary = false;
@@ -503,7 +571,7 @@ var update = function (modifier) {
 
 
     //if touch bottom, game over (redrocket)
- /*   if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
+    if (redRocket.y + redRocket.height > canvas.height + redRocket.height) {
         gameOver(redRocket); //looser name as param
     }
 
@@ -511,25 +579,29 @@ var update = function (modifier) {
     if (blueRocket.y + blueRocket.height > canvas.height + blueRocket.height) {
         gameOver(blueRocket); //looser name as param
     }
-*/
-    //if touch border of canvas : can move through walls
+
+/*  On comments because of the moving platform (it bugs with it)
+
+ //if touch border of canvas : can move through walls
     if (redRocket.x > canvas.width) redRocket.x = 0;
     else if (redRocket.x < 0) redRocket.x = canvas.width;
 
     //if touch border of canvas : can move through walls
     if (blueRocket.x > canvas.width) blueRocket.x = 0;
     else if (blueRocket.x < 0) blueRocket.x = canvas.width;
+    */
 };
 
 /********************************************************
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
 var touching = function (platform, rocket) {
-    if (!((rocket.y + rocket.height) < (platform.y - 3) ||
-        (rocket.y + rocket.height) > (platform.y + 3) ||
-        (rocket.x + rocket.width) <= platform.x ||
-        rocket.x >= (platform.x + 70)))
-        return true;
+    //only test platform that are under the rocket
+    if ((rocket.y + rocket.height) >= (platform.y - 3) && (rocket.y + rocket.height) <= (platform.y + 3)) {
+        if ((rocket.x + rocket.width) >= platform.x && rocket.x <= (platform.x + platform.width))
+            return true
+    }
+
 }
 
 
@@ -549,7 +621,6 @@ function gameOver(looser) {
 
 }
 
-/*XXXXXXXXXXXXXXXXX Gestion du score, update du palmares à faire ! XXXXXXXXXXXXXXXXXXXXX*/
 function showScore(winner, looser) {
     document.getElementById("cadreEndgame").style.display = "block";
     document.getElementById("logoAppEndgame").style.display = "block";
@@ -573,10 +644,10 @@ function updateScore(theWinner, thePoints) {
     var isSet = false;
     currentPalmares.forEach(function (element) {
         var infoScore = element.split('|');
-        console.log("infoScore : " + infoScore[1] + " | thePoints :" + thePoints);
+        //console.log("infoScore : " + infoScore[1] + " | thePoints :" + thePoints);
 
         if (infoScore[1] < thePoints && !isSet) {
-            console.log("coucou de l'intérieur du if");
+            //    console.log("coucou de l'intérieur du if");
             myValue = cpt;
             isSet = true;
         }
