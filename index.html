@@ -1,10 +1,14 @@
 <html>
+
 <head>
     <title>US Invasion</title>
     <link rel="stylesheet" type="text/css" href="_css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="icon" href="_ressources/logo/logo.ico">
+            <script src="_javascript/dragdrop.js"></script>
+
 </head>
+
 <body onload="displayScore();">
     <div id="first">
         <h2>INSTRUCTIONS</h2>
@@ -14,7 +18,7 @@
         <h2>CONTROLES</h2>
         <div id="controle">
             <div class="partControl">
-                <img class="logo" src="_ressources/logo/logoArrows/Xlogo.png">
+                <img class="logo" id="iconPlayer1" src="_ressources/logo/logoArrows/Interrogation3.png">
                 <img class="logo logoMovement" src="_ressources/logo/letters/w.png">
                 <h3 class="instuction">Sauter</h3>
             </div>
@@ -23,13 +27,13 @@
                 <img class="logo logoMovement" src="_ressources/logo/letters/a.png">
                 <h3 class="instuction">Gauche</h3>
             </div>
-             <div class="partControl">
+            <div class="partControl">
                 <img class="logo" src="_ressources/logo/logoArrows/Xlogo.png">
                 <img class="logo logoMovement" src="_ressources/logo/letters/d.png">
                 <h3 class="instuction">Droite</h3>
             </div>
             <div class="partControl">
-                <img class="logo" src="_ressources/logo/logoArrows/PlumeLogo.png">
+                <img class="logo" id="iconPlayer2" src="_ressources/logo/logoArrows/Interrogation3.png">
                 <img class="logo logoMovement" src="_ressources/logo/logoArrows/UpArrow.png">
                 <h3 class="instuction">Sauter</h3>
             </div>
@@ -38,7 +42,7 @@
                 <img class="logo logoMovement" src="_ressources/logo/logoArrows/LeftArrow.png">
                 <h3 class="instuction">Gauche</h3>
             </div>
-             <div class="partControl">
+            <div class="partControl">
                 <img class="logo" src="_ressources/logo/logoArrows/PlumeLogo.png">
                 <img class="logo logoMovement" src="_ressources/logo/logoArrows/RightArrow.png">
                 <h3 class="instuction">Droite</h3>
@@ -47,6 +51,17 @@
                 <div id="space">space</div>
                 <h3 id="pauseStatement">Pause / Play</h3>
             </div>
+        </div>
+        <br><br>
+
+        <div id="Company">
+            <h2>CHOOSE YOUR COMPANY</h2>
+            <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/Xlogo.png">
+            <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/Rockocpoc.png">
+            <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/PlumeLogo.png">
+            <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/casa.png">
+
+
         </div>
     </div>
 
@@ -61,12 +76,12 @@
             <img id="logoAppStart" src="_ressources/logo/logo.ico">
             <form id="startForm">
                 <div class="fieldFormStart">
-                <img id="imgPlayer1" src="_ressources/logo/logoArrows/Xlogo.png">
-                <input id="player1" type="text" class="inputPlayers" placeholder="Player 1">
+                    <img id="imgPlayer1" class="imgPlayer1" ondrop="drop(event)" ondragover="allowDrop(event)" src="_ressources/logo/logoArrows/Interrogation3.png">
+                    <input id="player1" type="text" class="inputPlayers" placeholder="Player 1">
                 </div>
                 <div class="fieldFormStart">
-                <img id="imgPlayer2" src="_ressources/logo/logoArrows/PlumeLogo.png">
-                <input id="player2" type="text" class="inputPlayers" placeholder="Player 2">
+                    <img id="imgPlayer2" class="imgPlayer2" ondrop="drop(event)" ondragover="allowDrop(event)" src="_ressources/logo/logoArrows/Interrogation3.png">
+                    <input id="player2" type="text" class="inputPlayers" placeholder="Player 2">
                 </div>
                 <input type="button" value="START" onclick="launchGame()">
             </form>
@@ -104,5 +119,7 @@
             </a>
         </div>
     </div>
+
 </body>
+
 </html>

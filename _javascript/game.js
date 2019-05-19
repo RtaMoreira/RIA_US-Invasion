@@ -39,50 +39,50 @@ BEFORE THE GAME
 var geoUser = "";
 
 if (localStorage.getItem("geoUserMemo") === null) { //if palmares is null we create it
-        localStorage.setItem("geoUserMemo", JSON.stringify(geoUser));
+    localStorage.setItem("geoUserMemo", JSON.stringify(geoUser));
 }
 
 function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-   console.log("goeloc not supported");
-  }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("goeloc not supported");
+    }
 }
 
 
 function showPosition(position) {
 
-        var getJSON = function(url, callback) {
+    var getJSON = function (url, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.responseType = 'json';
-        xhr.onload = function() {
+        xhr.onload = function () {
             var status = xhr.status;
-            if(status === 200){
+            if (status === 200) {
                 callback(null, xhr.response);
             } else {
                 callback(status, xhr.response);
             }
         };
         xhr.send();
-        };
+    };
 
-        getJSON('http://open.mapquestapi.com/geocoding/v1/reverse?key=A5AOlcOT3M0rfeqBbrwMLBfHMZWDF1vZ&location='+position.coords.latitude+','+position.coords.longitude+'&includeRoadMetadata=true&includeNearestIntersection=true', function(err, data) {
-            if(err !== null){
-                alert('Something went wrong: ' + err);
-            } else {
-                var thisGeoUser = data["results"]["0"]["locations"]["0"]["adminArea5"]+"-"+data["results"]["0"]["locations"]["0"]["adminArea1"];
-                localStorage.setItem("geoUserMemo", JSON.stringify(thisGeoUser));
-            }
-        });
+    getJSON('http://open.mapquestapi.com/geocoding/v1/reverse?key=A5AOlcOT3M0rfeqBbrwMLBfHMZWDF1vZ&location=' + position.coords.latitude + ',' + position.coords.longitude + '&includeRoadMetadata=true&includeNearestIntersection=true', function (err, data) {
+        if (err !== null) {
+            alert('Something went wrong: ' + err);
+        } else {
+            var thisGeoUser = data["results"]["0"]["locations"]["0"]["adminArea5"] + "-" + data["results"]["0"]["locations"]["0"]["adminArea1"];
+            localStorage.setItem("geoUserMemo", JSON.stringify(thisGeoUser));
+        }
+    });
 }
 
 getLocation();
 
 geoUser = localStorage.getItem("geoUserMemo");
-geoUser = geoUser.substring(1,geoUser.length); //Delete first character
-geoUser = geoUser.slice(0,-1); //Delete last character
+geoUser = geoUser.substring(1, geoUser.length); //Delete first character
+geoUser = geoUser.slice(0, -1); //Delete last character
 
 /*End geolocations part*/
 
@@ -244,7 +244,7 @@ platformImage.onload = function () {
 platformImage.src = "_ressources/images/platform_small.png";
 
 function Platform() {
-    this.width = 100;
+    this.width = 120;
     this.height = 10;
     this.speed = 0;
     //for moving platform
@@ -282,8 +282,8 @@ for (var i = platformCount - 1; i >= 0; i--) {
 function platformCalc() {
     platforms.forEach(function (p, i) {
         if (p.speed != 0) {
-            if (p.x + p.width > canvas.width) p.speed = -2; //other
-            else if (p.x < 0) p.speed = 2;
+            if (p.x + p.width > canvas.width) p.speed = -2; //returns back
+            else if (p.x < 0) p.speed = 2; // goes from left to right
 
             p.x += p.speed;
         }
@@ -443,7 +443,7 @@ var update = function (modifier) {
 
             if (touching(platform, redRocket)) {
                 redRocketStationary = true;
-                if (platform.speed != 0) //moving platform
+                if (platform.speed != 0) // if on moving platform, moves together
                 {
                     redRocket.x += platform.speed;
                 }
@@ -453,10 +453,9 @@ var update = function (modifier) {
 
     if (blueRocketJump == 0) {
         platforms.forEach(function (platform, i) {
-
             if (touching(platform, blueRocket)) {
                 blueRocketStationary = true;
-                if (platform.speed != 0) //moving platform
+                if (platform.speed != 0) //if on moving platform, moves together
                 {
                     blueRocket.x += platform.speed;
                 }
@@ -511,12 +510,12 @@ var update = function (modifier) {
                 var randomValue = Math.round(Math.random() * 10);
                 console.log("RANDOM red" + randomValue);
 
-                if (points > 1000) { //only moving platform (10000)
+                if (points > 4000) { //only moving platform (10000)
                     movingPlatform = true;
                 } else if (points > 2000 && points <= 4000) {
-                    if (randomValue < 7) movingPlatform = true;
-                } else if (points > 1000 && points <= 2000) {
                     if (randomValue < 3) movingPlatform = true;
+                } else if (points > 1000 && points <= 2000) {
+                    if (randomValue < 2) movingPlatform = true;
                 } else if (points > 500 && points <= 1000) {
                     if (randomValue < 1) movingPlatform = true;
                 }
@@ -532,48 +531,48 @@ var update = function (modifier) {
 
     }
 
-    //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
-    if (blueRocket.y < (canvas.height / 2) - (blueRocket.height + 100)) {
+        //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas... (redrocket)
+        if (blueRocket.y < (canvas.height / 2) - (blueRocket.height + 100)) {
 
-        if (blueRocketJump >= 15)
-            blueDeplacement = blueRocket.speed * blueRocketJump * modifier / 8;
-        else
-            blueDeplacement = gravity * modifier;
+            if (blueRocketJump >= 15)
+                blueDeplacement = blueRocket.speed * blueRocketJump * modifier / 8;
+            else
+                blueDeplacement = gravity * modifier;
 
-        for (var i = platformCount - 1; i >= 0; i--) {
-            //plateforms goes down at new jump
-            if (blueRocketJump <= 15) {
-                platforms[i].y += blueDeplacement;
-                points += Math.round(blueRocketJump / 10);
-            }
-
-
-            //if platform goes past the canvas, create new one
-            if (platforms[i].y > canvas.height) {
-                //random calcul to determine if moving or normal platform
-                var randomValue = Math.round(Math.random() * 10);
-                console.log("RANDOM blue " + randomValue);
-
-                if (points > 1000) { //only moving platform
-                    movingPlatform = true;
-                } else if (points > 700 && points <= 1000) {
-                    if (randomValue < 7) movingPlatform = true;
-                } else if (points > 400 && points <= 700) {
-                    if (randomValue < 3) movingPlatform = true;
-                } else if (points > 200 && points <= 400) {
-                    if (randomValue < 1) movingPlatform = true;
+            for (var i = platformCount - 1; i >= 0; i--) {
+                //plateforms goes down at new jump
+                if (blueRocketJump <= 15) {
+                    platforms[i].y += blueDeplacement;
+                    points += Math.round(blueRocketJump / 10);
                 }
-                platforms[i] = new Platform();
-                platforms[i].y = 0;
-                randomValue = false; //reset randomValue for next platform
 
+
+                //if platform goes past the canvas, create new one
+                if (platforms[i].y > canvas.height) {
+                    //random calcul to determine if moving or normal platform
+                    var randomValue = Math.round(Math.random() * 10);
+                    console.log("RANDOM blue " + randomValue);
+
+                    if (points > 4000) { //only moving platform
+                        movingPlatform = true;
+                    } else if (points > 2000 && points <= 4000) {
+                        if (randomValue < 3) movingPlatform = true;
+                    } else if (points > 1000 && points <= 2000) {
+                        if (randomValue < 2) movingPlatform = true;
+                    } else if (points > 500 && points <= 1000) {
+                        if (randomValue < 1) movingPlatform = true;
+                    }
+                    platforms[i] = new Platform();
+                    platforms[i].y = 0;
+                    randomValue = false; //reset randomValue for next platform
+
+                }
             }
-        }
-        //other rocket goes down by the same amount as the platforms
-        redRocket.y += blueDeplacement;
-        blueRocket.y += blueDeplacement;
+            //other rocket goes down by the same amount as the platforms
+            redRocket.y += blueDeplacement;
+            blueRocket.y += blueDeplacement;
 
-    }
+        }
 
     //if spaceBar is pressed, we diplay the Pause div and pause the game
     if (32 in keysDown) {
@@ -631,16 +630,16 @@ var update = function (modifier) {
         gameOver(blueRocket); //looser name as param
     }
 
-/*  On comments because of the moving platform (it bugs with it)
+    /*  On comment because of the moving platforms (it bugs together)
 
- //if touch border of canvas : can move through walls
-    if (redRocket.x > canvas.width) redRocket.x = 0;
-    else if (redRocket.x < 0) redRocket.x = canvas.width;
+     //if touch border of canvas : can move through walls
+        if (redRocket.x > canvas.width) redRocket.x = 0;
+        else if (redRocket.x < 0) redRocket.x = canvas.width;
 
-    //if touch border of canvas : can move through walls
-    if (blueRocket.x > canvas.width) blueRocket.x = 0;
-    else if (blueRocket.x < 0) blueRocket.x = canvas.width;
-    */
+        //if touch border of canvas : can move through walls
+        if (blueRocket.x > canvas.width) blueRocket.x = 0;
+        else if (blueRocket.x < 0) blueRocket.x = canvas.width;
+        */
 };
 
 /********************************************************
@@ -707,7 +706,7 @@ function updateScore(theWinner, thePoints) {
 
     console.log("myValue :" + myValue);
 
-    currentPalmares.splice(myValue, 0, theWinner+','+geoUser+ '|' + thePoints);
+    currentPalmares.splice(myValue, 0, theWinner + ',' + geoUser + '|' + thePoints);
 
     localStorage.setItem("palmares", JSON.stringify(currentPalmares));
 
