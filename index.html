@@ -55,7 +55,7 @@
         <br><br>
 
         <div id="Company">
-            <h2>CHOOSE YOUR COMPANY</h2>
+            <h2>CHOISIS TA COMPAGNIE</h2>
             <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/Xlogo.png">
             <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/Rockocpoc.png">
             <img class="company" draggable="true" ondragstart="drag(event)" src="_ressources/logo/logoArrows/PlumeLogo.png">
@@ -77,13 +77,13 @@
             <form id="startForm">
                 <div class="fieldFormStart">
                     <img id="imgPlayer1" class="imgPlayer1" ondrop="drop(event)" ondragover="allowDrop(event)" src="_ressources/logo/logoArrows/Interrogation3.png">
-                    <input id="player1" type="text" class="inputPlayers" placeholder="Player 1">
+                    <input id="player1" type="text" class="inputPlayers" placeholder="Player 1" required minlength="3" maxlength="3">
                 </div>
                 <div class="fieldFormStart">
                     <img id="imgPlayer2" class="imgPlayer2" ondrop="drop(event)" ondragover="allowDrop(event)" src="_ressources/logo/logoArrows/Interrogation3.png">
-                    <input id="player2" type="text" class="inputPlayers" placeholder="Player 2">
+                    <input id="player2" type="text" class="inputPlayers" placeholder="Player 2" required minlength="3" maxlength="3">
                 </div>
-                <input type="button" value="START" onclick="launchGame()">
+                <input type="button" value="START" onclick="checkBeforeLaunch()">
             </form>
         </div>
 

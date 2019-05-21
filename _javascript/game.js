@@ -86,6 +86,25 @@ geoUser = geoUser.slice(0, -1); //Delete last character
 
 /*End geolocations part*/
 
+/*Check before launch*/
+
+var checkBeforeLaunch = function () {
+    var imgPlayer1 = document.getElementById("imgPlayer1");
+    var imgPlayer2 = document.getElementById("imgPlayer2");
+
+
+    console.log(imgPlayer1.src);
+
+    if( imgPlayer1.src === "file:///C:/Users/vbrid/OneDrive/Bureau/HES/SEMESTRE4/RIA/PROJET/_ressources/logo/logoArrows/Interrogation3.png" ||
+        imgPlayer2.src === "file:///C:/Users/vbrid/OneDrive/Bureau/HES/SEMESTRE4/RIA/PROJET/_ressources/logo/logoArrows/Interrogation3.png"){
+        alert("Veuillez choisir une compagnie spaciale !");
+    }else{
+        launchGame();
+    }
+}
+
+/*End check before launch*/
+
 var launchGame = function () {
     player1 = document.getElementById("player1").value;
     player2 = document.getElementById("player2").value;
