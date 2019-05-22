@@ -384,32 +384,6 @@ addEventListener("keyup", function (e) {
 }, false);
 
 /********************************************************
-MAIN LOOP
-********************************************************/
-var main = function () {
-    var now = Date.now();
-    var delta = now - then;
-    modifier = delta / 1000;
-    if (startScreen)
-        startAnimation(delta / 100);
-
-    if (playing) {
-        document.getElementById("buttonSkip").style.display = "none";
-        if (!paused) {
-            update(modifier);
-            platformCalc();
-        }
-    }
-
-    render();
-
-    then = now;
-    // Request to do this again ASAP
-    requestAnimationFrame(main);
-};
-
-
-/********************************************************
 START ANIMATION
 ********************************************************/
 var startAnimation = function (modifier) {
@@ -526,8 +500,13 @@ var update = function (modifier) {
 
 
     //check if rocket touches any platform (only when falling)
+    if(redRocketJump > 0) {
+        //jump (redrocket)
+        redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
+        redRocketJump--;
+    }else if (!redRocketStationary &&redRocketJump <= 0) {
+        redRocket.y += gravity * modifier;
 
-    if (redRocketJump == 0) {
         platforms.forEach(function (platform, i) {
 
             if (touching(platform, redRocket)) {
@@ -540,7 +519,13 @@ var update = function (modifier) {
         })
     }
 
-    if (blueRocketJump == 0) {
+    if(blueRocketJump > 0) {
+        //jump blueRocket
+        blueRocket.y -= blueRocket.speed * modifier * blueRocketJump / 10;
+        blueRocketJump--;
+    }else if (!blueRocketStationary && blueRocketJump <= 0) {
+        blueRocket.y += gravity * modifier;
+
         platforms.forEach(function (platform, i) {
             if (touching(platform, blueRocket)) {
                 blueRocketStationary = true;
@@ -550,30 +535,6 @@ var update = function (modifier) {
                 }
             }
         })
-    }
-
-    //jump or fall or stay on platform (redrocket)
-    if (redRocketJump > 0) {
-        redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
-        redRocketJump--;
-    } else {
-        if (redRocketStationary)
-            redRocket.y = redRocket.y;
-        else {
-            redRocket.y += gravity * modifier;
-        }
-    }
-
-    //jump or fall or stay on platform (bluerocket)
-    if (blueRocketJump > 0) {
-        blueRocket.y -= blueRocket.speed * modifier * blueRocketJump / 10;
-        blueRocketJump--;
-    } else {
-        if (blueRocketStationary)
-            blueRocket.y = blueRocket.y;
-        else {
-            blueRocket.y += gravity * modifier;
-        }
     }
 
     //moves the plateform when reach half of the screen
@@ -655,11 +616,12 @@ var update = function (modifier) {
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
 var touching = function (platform, rocket) {
+    var rocketHeight = rocket.y+rocket.height;
 
     //only test platform that are under the rocket
-    if ((rocket.y + rocket.height) >= (platform.y - 3) && (rocket.y + rocket.height) <= (platform.y + 3)) {
-        if ((rocket.x + rocket.width) >= platform.x && rocket.x <= (platform.x + platform.width))
-           return true;
+    if (rocketHeight >= (platform.y - 6) && rocketHeight <= (platform.y + 6)) {
+
+        return ((rocket.x + rocket.width) >= platform.x && rocket.x <= (platform.x + platform.width))
     }
 }
 
@@ -805,18 +767,39 @@ var render = function () {
 };
 
 /********************************************************
+MAIN LOOP
+********************************************************/
+var main = function () {
+    var now = Date.now();
+    var delta = now - then;
+    modifier = delta / 1000;
+
+    if (startScreen)
+        startAnimation(delta / 100);
+
+    if (playing) {
+        document.getElementById("buttonSkip").style.display = "none";
+        if (!paused) {
+            update(modifier);
+            platformCalc();
+        }
+    }
+
+    render();
+
+    then = now;
+    // Request to do this again ASAP
+    requestAnimationFrame(main);
+};
+
+/********************************************************
 Cross-browser support for requestAnimationFrame
 ********************************************************/
 var w = window;
 requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
-var start = function () {
-
-}
-
 /********************************************************
 PLAY
 ********************************************************/
 var then = Date.now();
-start();
 main();
