@@ -94,8 +94,8 @@ var checkBeforeLaunch = function () {
     var imgPlayer1 = document.getElementById("imgPlayer1");
     var imgPlayer2 = document.getElementById("imgPlayer2");
 
-    if (imgPlayer1.src === "file:///C:/Users/vbrid/OneDrive/Bureau/HES/SEMESTRE4/RIA/PROJET/game/_ressources/logo/logoArrows/Interrogation3.png" ||
-        imgPlayer2.src === "file:///C:/Users/vbrid/OneDrive/Bureau/HES/SEMESTRE4/RIA/PROJET/game/_ressources/logo/logoArrows/Interrogation3.png") {
+    if (imgPlayer1.src.includes("game/_ressources/logo/logoArrows/Interrogation3.png") ||
+        imgPlayer2.src.includes("game/_ressources/logo/logoArrows/Interrogation3.png")) {
         alert("Veuillez choisir une compagnie spaciale !");
     } else {
         launchGame();
