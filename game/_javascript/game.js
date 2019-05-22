@@ -263,19 +263,25 @@ function Rocket(speed, y, x, width, height, isDead, player) {
 
                         //random calcul to determine if moving or normal platform
                         var randomValue = Math.round(Math.random() * 10);
-                        console.log("RANDOM red" + randomValue);
 
-                        if (points > 4000) { //only moving platform (10000)
+                        if (points > 15000) { //only moving platform (15000)
                             movingPlatform = true;
-                        } else if (points > 2000 && points <= 4000) {
-                            if (randomValue < 3) movingPlatform = true;
-                        } else if (points > 1000 && points <= 2000) {
+                        } else if (points > 7000 && points <= 15000) {
+                            if (randomValue < 4) movingPlatform = true;
+                        } else if (points > 3000 && points <= 7000) {
                             if (randomValue < 2) movingPlatform = true;
-                        } else if (points > 500 && points <= 1000) {
+                        } else if (points > 1000 && points <= 3000) {
                             if (randomValue < 1) movingPlatform = true;
                         }
                         platforms[i] = new Platform();
                         platforms[i].y = 0;
+
+                        //when reach 7000, moving platforms can be quicker (random)
+                        if (movingPlatform == true) {
+                            if (points > 7000 && randomValue < 5)
+                                platforms[i].speed = randomValue*2;
+
+                        }
                         randomValue = false; //reset randomValue for next platform
                         movingPlatform = false;
                     }
@@ -360,8 +366,8 @@ for (var i = platformCount - 1; i >= 0; i--) {
 function platformCalc() {
     platforms.forEach(function (p, i) {
         if (p.speed != 0) {
-            if (p.x + p.width > canvas.width) p.speed = -2; //returns back
-            else if (p.x < 0) p.speed = 2; // goes from left to right
+            if (p.x + p.width > canvas.width) p.speed = 0 - p.speed; //returns back
+            else if (p.x < 0) p.speed = 0 + Math.abs(p.speed); // goes from left to right
 
             p.x += p.speed;
         }
@@ -501,11 +507,11 @@ var update = function (modifier) {
 
 
     //check if rocket touches any platform (only when falling)
-    if(redRocketJump > 0) {
+    if (redRocketJump > 0) {
         //jump (redrocket)
         redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
         redRocketJump--;
-    }else if (redRocketJump <= 0) {
+    } else if (redRocketJump <= 0) {
         platforms.forEach(function (platform, i) {
 
             if (touching(platform, redRocket)) {
@@ -517,15 +523,15 @@ var update = function (modifier) {
             }
         })
 
-        if(!redRocketStationary)
+        if (!redRocketStationary)
             redRocket.y += gravity * modifier;
     }
 
-    if(blueRocketJump > 0) {
+    if (blueRocketJump > 0) {
         //jump blueRocket
         blueRocket.y -= blueRocket.speed * modifier * blueRocketJump / 10;
         blueRocketJump--;
-    }else if (blueRocketJump <= 0) {
+    } else if (blueRocketJump <= 0) {
         platforms.forEach(function (platform, i) {
             if (touching(platform, blueRocket)) {
                 blueRocketStationary = true;
@@ -536,7 +542,7 @@ var update = function (modifier) {
             }
         })
 
-        if(!blueRocketStationary)
+        if (!blueRocketStationary)
             blueRocket.y += gravity * modifier;
     }
 
@@ -619,7 +625,7 @@ var update = function (modifier) {
 TEST IF ROCKET IS TOUCHIN PLATFORM
 ********************************************************/
 var touching = function (platform, rocket) {
-    var rocketHeight = rocket.y+rocket.height;
+    var rocketHeight = rocket.y + rocket.height;
 
     //only test platform that are under the rocket
     if (rocketHeight >= (platform.y - 6) && rocketHeight <= (platform.y + 6)) {
