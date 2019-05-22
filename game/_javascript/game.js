@@ -399,6 +399,7 @@ var startAnimation = function (modifier) {
                 boobal1.y -= 100 * modifier;
                 if (boobal2.x > 110){
                     talk1.pause();
+                    talk1.currentTime=0;
                     boobal2.x -= 100 * modifier;
                     talk2.play();
                 }
@@ -409,6 +410,7 @@ var startAnimation = function (modifier) {
                         boobal2.y -= 100 * modifier;
                         if (boobal3.x < 110){
                             talk2.pause();
+                            talk2.currentTime=0;
                             boobal3.x += 100 * modifier;
                             talk1.play();
                         }
@@ -426,6 +428,7 @@ var startAnimation = function (modifier) {
                                     if (pause4 > 0)
                                         pause4 -= modifier;
                                     else {
+                                        talk2.pause();
                                         boobal4.y -= 100 * modifier;
                                         musk.x += 100 * modifier;
                                         bezos.x -= 100 * modifier;
