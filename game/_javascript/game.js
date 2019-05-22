@@ -128,16 +128,16 @@ var launchGame = function () {
 }
 
 //elements
-var talk1 = new Audio("_ressources/sound/talk1.mp4");
-var talk2 = new Audio("_ressources/sound/talk2.mp4");
-var pjou1 = new Audio("_ressources/sound/pjiou_J.mp4");
-var pjou2 = new Audio("_ressources/sound/pjiou_R.mp4");
-var fart1 = new Audio("_ressources/sound/fart1.mp4");
-var fart2 = new Audio("_ressources/sound/fart2.mp4");
-var fart3 = new Audio("_ressources/sound/fart3.mp4");
-var fart4 = new Audio("_ressources/sound/fart4.mp4");
-var fart5 = new Audio("_ressources/sound/fart5.mp4");
-var lost = new Audio("_ressources/sound/lost.mp4");
+var talk1 = new Audio("_ressources/sound/talk1.mp3")
+var talk2 = new Audio("_ressources/sound/talk2.mp3");
+var pjou1 = new Audio("_ressources/sound/pjiou_J.mp3");
+var pjou2 = new Audio("_ressources/sound/pjiou_R.mp3");
+var fart1 = new Audio("_ressources/sound/fart1.mp3");
+var fart2 = new Audio("_ressources/sound/fart2.mp3");
+var fart3 = new Audio("_ressources/sound/fart3.mp3");
+var fart4 = new Audio("_ressources/sound/fart4.mp3");
+var fart5 = new Audio("_ressources/sound/fart5.mp3");
+var lost = new Audio("_ressources/sound/lost.mp3");
 var farts = [fart1,fart2,fart3,fart4,fart5];
 
 var muskReady = false;
