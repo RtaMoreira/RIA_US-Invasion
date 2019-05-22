@@ -92,9 +92,6 @@ var checkBeforeLaunch = function () {
     var imgPlayer1 = document.getElementById("imgPlayer1");
     var imgPlayer2 = document.getElementById("imgPlayer2");
 
-
-    console.log(imgPlayer1.src);
-
     if( imgPlayer1.src === "file:///C:/Users/vbrid/OneDrive/Bureau/HES/SEMESTRE4/RIA/PROJET/_ressources/logo/logoArrows/Interrogation3.png" ||
         imgPlayer2.src === "file:///C:/Users/vbrid/OneDrive/Bureau/HES/SEMESTRE4/RIA/PROJET/_ressources/logo/logoArrows/Interrogation3.png"){
         alert("Veuillez choisir une compagnie spaciale !");
@@ -118,6 +115,13 @@ var launchGame = function () {
     if (localStorage.getItem("palmares") === null) { //if palmares is null we create it
         localStorage.setItem("palmares", JSON.stringify(palmares));
     }
+
+    var x;         // Now x is undefined
+    console.log(typeof(x));
+    x = 5;         // Now x is a Number
+    console.log(typeof(x));
+    x = "John";      // Now x is a String
+    console.log(typeof(x));
 
 }
 
@@ -700,6 +704,16 @@ function showScore(winner, looser) {
     updateScore(winner, points);
 
     displayScore();
+}
+
+function reload(){
+    $.ajax({
+    type: "GET",
+    url: "index.html",
+    success: function() {
+        location.reload();
+    }
+    });
 }
 
 /********************************************************

@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,400i,700|Roboto+Slab:700');
+
+*, html {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family : 'Montserrat';
+}
+
+
+header:first-of-type, {
+
+    display : inline-block;
+    width : 100%;
+}
+
+main{
+	min-height : 70%;
+    display:flex;
+    justify-content: space-between;
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+
+footer{
+  clear: both;
+  position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #454545;
+  text-align: center;
+}
+
+/********** text config **/
+
+h1{
+
+    text-align : center;
+    color : white;
+    font-family : 'Roboto slab';
+    padding : 2.5em 0 0.5em 0;
+	background: rgba(255,220,207,1);
+	background: -moz-linear-gradient(top, rgba(255,220,207,1) 0%, rgba(235,112,64,1) 48%, rgba(226,102,52,1) 84%, rgba(191,81,40,1) 85%, rgba(226,102,52,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,220,207,1)), color-stop(48%, rgba(235,112,64,1)), color-stop(84%, rgba(226,102,52,1)), color-stop(85%, rgba(191,81,40,1)), color-stop(100%, rgba(226,102,52,1)));
+	background: -webkit-linear-gradient(top, rgba(255,220,207,1) 0%, rgba(235,112,64,1) 48%, rgba(226,102,52,1) 84%, rgba(191,81,40,1) 85%, rgba(226,102,52,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,220,207,1) 0%, rgba(235,112,64,1) 48%, rgba(226,102,52,1) 84%, rgba(191,81,40,1) 85%, rgba(226,102,52,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,220,207,1) 0%, rgba(235,112,64,1) 48%, rgba(226,102,52,1) 84%, rgba(191,81,40,1) 85%, rgba(226,102,52,1) 100%);
+	background: linear-gradient(to bottom, rgba(255,220,207,1) 0%, rgba(235,112,64,1) 48%, rgba(226,102,52,1) 84%, rgba(191,81,40,1) 85%, rgba(226,102,52,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffdccf', endColorstr='#e26634', GradientType=0 );
+}
+
+/********** articles header **/
+h2{
+	font-family : 'Roboto slab';
+	border-bottom : solid 1px grey;
+	margin : 0 0 4px 0;
+}
+
+
+h2+p{
+	color : grey;
+	font-style : italic;
+	float : right;
+}
+
+h3{
+	color : white;
+	background-color : rgba(226,102,52,1);
+	font-family : 'Roboto slab';
+	padding : 4px;
+}
+
+
+a{
+	text-decoration : none;
+	color : rgba(226,102,52,1);
+}
+
+
+/********** Navigation **/
+
+nav{
+    background-color: #454545;
+    display : inline-block;
+    width : 100%;
+    padding : 0px 32px;
+}
+
+ul {
+	list-style : none;
+	display : table;
+    float : left;
+    text-align : center;
+}
+
+li {
+    display : table-cell;
+    position : relative;
+    float : left;
+}
+
+
+li a{
+	text-decoration : none;
+	padding : 8px;
+	display : block;
+	color : white;
+	font-family : 'Montserrat'  ;
+	font-weight : bold;
+    font-size : 0.8em;
+}
+
+li:hover a, .active a{
+    background-color: white;
+    color : orange;
+
+}
+
+.hamburger
+{
+    display : none;
+}
+
+/********** articles **/
+
+
+#articles {
+
+	width : 100%;
+    padding: 32px;
+
+}
+
+#articles header {
+		margin : 0 0 3em 0;
+
+}
+
+/********** fiche signalétique **/
+
+aside {
+    width: 20%;
+    min-width: 280px;
+    box-shadow : 1px 1px 15px gray;
+    margin: 1em;
+    height : min-content;
+
+}
+
+
+aside li p {
+	padding : 8px;
+}
+
+/*********** mockups jeu **/
+
+div.mockup {
+	width : 32%;
+	height : auto;
+	float : left;
+	padding : 1em;
+}
+
+.mockup img {
+	width : 100%;
+	height : auto;
+	height : inherit;
+}
+
+.mockup p {
+	text-align: center;
+	font-weight : bold;
+}
+
+/************ mockups site **/
+
+div.mockup-site img, #processus {
+	display: block;
+	margin : 0 auto;
+	width: 70%;
+	height : auto;
+	padding : 1em;
+}
+
+.mockup-site {
+	text-align: center;
+}
+
+/************* journal de bord **/
+table {
+	border-collapse: collapse;
+	margin:50px auto;
+	}
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+	background: #eee;
+	}
+
+th {
+	background: #454545;
+	color: white;
+	font-weight: bold;
+	}
+
+td, th {
+	padding: 10px;
+	border: 1px solid #ccc;
+	text-align: left;
+	font-size: 18px;
+	}
+
+td:first-of-type{
+    font-weight: bolder;
+}
+
+
+
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	table {
+	  	width: 100%;
+	}
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	tr { border: 1px solid #ccc; }
+
+	td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+	}
+
+	td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+		/* Label the data */
+		content: attr(data-column);
+
+		color: #000;
+		font-weight: bold;
+	}
+    td:first-child{
+        border-bottom: 1px solid black;
+    }
+
+    main{
+        flex-direction: column;
+    }
+
+}
+
+@media only screen and (max-width : 576px) {
+
+    .hamburger{
+        display: inline-block;
+    }
+
+
+	nav li {
+
+		text-align: center;
+		width: 100%;
+		margin: 0;
+
+	}
+
+    nav{
+        padding : 0px;
+    }
+
+    .mockup-site img, div.mockup, #processus{
+        width: 100% !important;
+        padding-bottom: 2em;
+    }
+
+    aside{
+        margin : 1em auto;
+    }
+
+}
+
+
+
+
+
