@@ -505,9 +505,7 @@ var update = function (modifier) {
         //jump (redrocket)
         redRocket.y -= redRocket.speed * modifier * redRocketJump / 10;
         redRocketJump--;
-    }else if (!redRocketStationary &&redRocketJump <= 0) {
-        redRocket.y += gravity * modifier;
-
+    }else if (redRocketJump <= 0) {
         platforms.forEach(function (platform, i) {
 
             if (touching(platform, redRocket)) {
@@ -518,15 +516,16 @@ var update = function (modifier) {
                 }
             }
         })
+
+        if(!redRocketStationary)
+            redRocket.y += gravity * modifier;
     }
 
     if(blueRocketJump > 0) {
         //jump blueRocket
         blueRocket.y -= blueRocket.speed * modifier * blueRocketJump / 10;
         blueRocketJump--;
-    }else if (!blueRocketStationary && blueRocketJump <= 0) {
-        blueRocket.y += gravity * modifier;
-
+    }else if (blueRocketJump <= 0) {
         platforms.forEach(function (platform, i) {
             if (touching(platform, blueRocket)) {
                 blueRocketStationary = true;
@@ -536,6 +535,9 @@ var update = function (modifier) {
                 }
             }
         })
+
+        if(!blueRocketStationary)
+            blueRocket.y += gravity * modifier;
     }
 
     //moves the plateform when reach half of the screen
