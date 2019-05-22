@@ -573,7 +573,7 @@ var update = function (modifier) {
                 platforms[i] = new Platform();
                 platforms[i].y = 0;
                 randomValue = false; //reset randomValue for next platform
-
+                movingPlatform = false;
             }
         }
         //other rocket goes down by the same amount as the platforms
@@ -616,6 +616,8 @@ var update = function (modifier) {
                     platforms[i] = new Platform();
                     platforms[i].y = 0;
                     randomValue = false; //reset randomValue for next platform
+                    movingPlatform = false;
+
 
                 }
             }
