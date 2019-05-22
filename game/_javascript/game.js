@@ -21,6 +21,8 @@ var redDeplacement;
 var blueDeplacement;
 var position = 0;
 var palmares = [];
+var firstB = true;
+var firstR = true;
 
 /********************************************************
 Create the canvas
@@ -126,6 +128,18 @@ var launchGame = function () {
 }
 
 //elements
+var talk1 = new Audio("_ressources/sound/talk1.mp4");
+var talk2 = new Audio("_ressources/sound/talk2.mp4");
+var pjou1 = new Audio("_ressources/sound/pjiou_J.mp4");
+var pjou2 = new Audio("_ressources/sound/pjiou_R.mp4");
+var fart1 = new Audio("_ressources/sound/fart1.mp4");
+var fart2 = new Audio("_ressources/sound/fart2.mp4");
+var fart3 = new Audio("_ressources/sound/fart3.mp4");
+var fart4 = new Audio("_ressources/sound/fart4.mp4");
+var fart5 = new Audio("_ressources/sound/fart5.mp4");
+var lost = new Audio("_ressources/sound/lost.mp4");
+var farts = [fart1,fart2,fart3,fart4,fart5];
+
 var muskReady = false;
 var muskImage = new Image();
 muskImage.onload = function () {
@@ -373,30 +387,41 @@ var startAnimation = function (modifier) {
 
     //do phase 2 (bubbles)
     if (!phase1) {
-        if (boobal1.x < 110)
+        if (boobal1.x < 110){
             boobal1.x += 100 * modifier;
+            talk1.play();
+        }
         else {
             if (pause1 > 0)
                 pause1 -= modifier;
             else {
                 //disapear text1 and appear text2
                 boobal1.y -= 100 * modifier;
-                if (boobal2.x > 110)
+                if (boobal2.x > 110){
+                    talk1.pause();
                     boobal2.x -= 100 * modifier;
+                    talk2.play();
+                }
                 else {
                     if (pause2 > 0)
                         pause2 -= modifier;
                     else {
                         boobal2.y -= 100 * modifier;
-                        if (boobal3.x < 110)
+                        if (boobal3.x < 110){
+                            talk2.pause();
                             boobal3.x += 100 * modifier;
+                            talk1.play();
+                        }
                         else {
                             if (pause3 > 0)
                                 pause3 -= modifier;
                             else {
                                 boobal3.y -= 100 * modifier;
-                                if (boobal4.x > 110)
+                                if (boobal4.x > 110){
+                                    talk1.pause();
                                     boobal4.x -= 100 * modifier;
+                                    talk2.play();
+                                }
                                 else {
                                     if (pause4 > 0)
                                         pause4 -= modifier;
@@ -606,6 +631,14 @@ var update = function (modifier) {
         if (redRocketStationary) {
             redRocketJump = 16;
             redRocketStationary = false;
+            if(firstR===true){
+                firstR=false;
+                pjou1.play();
+            }
+            else{
+                farts[parseInt(Math.random()*5)].play();
+                console.log(""+parseInt(Math.random()*5));
+            }
         }
     }
 
@@ -614,6 +647,13 @@ var update = function (modifier) {
         if (blueRocketStationary) {
             blueRocketJump = 16;
             blueRocketStationary = false;
+            if(firstB===true){
+                firstB=false;
+                pjou2.play();
+            }
+            else{
+                farts[parseInt(Math.random()*5)].play();
+            }
         }
     }
 
@@ -702,7 +742,7 @@ function showScore(winner, looser) {
     document.getElementById("afterEndgame").style.display = "block";
 
     updateScore(winner, points);
-
+    lost.play();
     displayScore();
 }
 
