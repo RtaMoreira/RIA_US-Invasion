@@ -128,6 +128,7 @@ var launchGame = function () {
 }
 
 //elements
+var ambient = new Audio("_ressources/sound/ambient.mp3");
 var talk1 = new Audio("_ressources/sound/talk1.mp3")
 var talk2 = new Audio("_ressources/sound/talk2.mp3");
 var pjou1 = new Audio("_ressources/sound/pjiou_J.mp3");
@@ -778,6 +779,7 @@ var main = function () {
         startAnimation(delta / 100);
 
     if (playing) {
+        ambient.play();
         document.getElementById("buttonSkip").style.display = "none";
         if (!paused) {
             update(modifier);
