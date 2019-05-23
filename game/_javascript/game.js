@@ -230,7 +230,7 @@ var bgImage = new Image();
 bgImage.onload = function () {
     bgReady = true;
 };
-bgImage.src = "_ressources/images/bg.png";
+bgImage.src = "_ressources/images/bg1.jpg";
 
 function Rocket(speed, y, x, width, height, isDead, player) {
     var rocket = this;
