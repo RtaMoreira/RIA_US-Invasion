@@ -263,7 +263,7 @@ function Rocket(speed, y, x, width, height, isDead, player) {
 
                 for (var i = platforms.length - 1; i >= 0; i--) {
 
-                    //when hidden, doesn't need to move it or create a new platform
+                    //if already hidden, doesn't need to move it or create a new platform
                     if (platforms[i].isHidden) {
                         platforms[i].y = 1500;
 
@@ -285,38 +285,36 @@ function Rocket(speed, y, x, width, height, isDead, player) {
                                 movingPlatform = true;
                             } else if (points > 7000 && points <= 15000) {
                                 if (randomValue < 5) movingPlatform = true;
-                            } else if (points > 2000 && points <= 7000) {
-                                 movingPlatform = true;
-                            } else if (points > 500 && points <= 2000) {
-                                if (randomValue < 4) movingPlatform = true;
+                            } else if (points > 3000 && points <= 7000) {
+                                if (randomValue < 3) movingPlatform = true;
+                            } else if (points > 1000 && points <= 3000) {
+                                if (randomValue < 1) movingPlatform = true;
                             }
 
-                            if (nextOneHidden && movingPlatform == false) {
+                            if (nextOneHidden && movingPlatform == false) {  //create hidden platform
                                 platformCount -= 1;
                                 platforms[i] = new Platform();
                                 platforms[i].y = 1500;
                                 platforms[i].isHidden = true;
-                                nextOneHidden = false
-
-                            } else {
+                                nextOneHidden = false;
+                            } else {                                       //create visible platform
                                 platforms[i] = new Platform();
                                 platforms[i].y = 0;
                             }
 
-                            //at 10000, decrease number of platforms (gradually) after each new moving platform
-                            if (points > 500 && movingPlatform == true && platformCount > 11) {
+                            //at 10000, decrease number of platforms (gradually up to 11) after each new moving platform
+                            if (points > 10000 && movingPlatform == true && platformCount > 11) {
                                 nextOneHidden = true;
                             }
 
-
-                            //when reach 7000, moving platforms can be quicker (random)
+                            //when reach 5000, moving platforms can be quicker (random)
                             if (movingPlatform == true) {
-                                if (points > 7000 && randomValue < 5)
-                                    platforms[i].speed = randomValue * 2;
+                                if (points > 5000 && randomValue < 5)
+                                    platforms[i].speed = (1+randomValue) * 2;
 
                             }
-                            randomValue = false; //reset randomValue for next platform
-                            movingPlatform = false;
+                            randomValue = false;    //reset for next platform
+                            movingPlatform = false; //reset
                         }
                     }
                 }
@@ -390,7 +388,7 @@ function Platform() {
 
 //1st generation of platforms
 //first platform at the beginning of the array (first to be tested)
-for (var i = platformCount-1; i >= 0; i--) {
+for (var i = platformCount - 1; i >= 0; i--) {
     platforms[i] = (new Platform());
     //1st platform always in the middle for start
     if (i == 0) {
