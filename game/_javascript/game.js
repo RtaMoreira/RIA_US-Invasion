@@ -17,6 +17,7 @@ var paused = false;
 var platforms = [];
 var platformCount = 15;
 var movingPlatform;
+var nextOneHidden;
 var deplacement;
 var modifier;
 var position = 0;
@@ -125,11 +126,11 @@ var launchGame = function () {
     x = "John"; // Now x is a String
     console.log(typeof (x));
 
-    function first(callback){
+    function first(callback) {
         console.log("doing first task");
         callback();
     }
-    first(function(){
+    first(function () {
         console.log("doing second task");
     })
 
@@ -254,44 +255,69 @@ function Rocket(speed, y, x, width, height, isDead, player) {
             //When the rocket reaches half height : move the platforms to create the illusion of scrolling and recreate the platforms that are out of canvas...
             if (this.y < (canvas.height / 2) - (this.height + 100)) {
 
+
                 if (rocketJump >= 15)
                     deplacement = this.speed * rocketJump * modifier / 8;
                 else
                     deplacement = gravity * modifier;
 
-                for (var i = platformCount - 1; i >= 0; i--) {
-                    //plateforms goes down at new jump
-                    if (rocketJump <= 15) {
-                        platforms[i].y += deplacement;
-                        points += Math.round(rocketJump / 10);
-                    }
+                for (var i = platforms.length - 1; i >= 0; i--) {
 
-                    //if platform goes past the canvas, create new one
-                    if (platforms[i].y > canvas.height) {
+                    //when hidden, doesn't need to move it or create a new platform
+                    if (platforms[i].isHidden) {
+                        platforms[i].y = 1500;
 
-                        //random calcul to determine if moving or normal platform
-                        var randomValue = Math.round(Math.random() * 10);
+                    } else {
 
-                        if (points > 15000) { //only moving platform (15000)
-                            movingPlatform = true;
-                        } else if (points > 7000 && points <= 15000) {
-                            if (randomValue < 4) movingPlatform = true;
-                        } else if (points > 3000 && points <= 7000) {
-                            if (randomValue < 2) movingPlatform = true;
-                        } else if (points > 1000 && points <= 3000) {
-                            if (randomValue < 1) movingPlatform = true;
+                        //plateforms goes down at new jump
+                        if (rocketJump <= 15) {
+                            platforms[i].y += deplacement;
+                            points += Math.round(rocketJump / 10); //score
                         }
-                        platforms[i] = new Platform();
-                        platforms[i].y = 0;
 
-                        //when reach 7000, moving platforms can be quicker (random)
-                        if (movingPlatform == true) {
-                            if (points > 7000 && randomValue < 5)
-                                platforms[i].speed = randomValue*2;
+                        //if platform goes past the canvas, create new one
+                        if (platforms[i].y > canvas.height) {
 
+                            //random calcul to determine if moving or normal platform
+                            var randomValue = Math.round(Math.random() * 10);
+
+                            if (points > 15000) { //only moving platform (15000)
+                                movingPlatform = true;
+                            } else if (points > 7000 && points <= 15000) {
+                                if (randomValue < 5) movingPlatform = true;
+                            } else if (points > 2000 && points <= 7000) {
+                                 movingPlatform = true;
+                            } else if (points > 500 && points <= 2000) {
+                                if (randomValue < 4) movingPlatform = true;
+                            }
+
+                            if (nextOneHidden && movingPlatform == false) {
+                                platformCount -= 1;
+                                platforms[i] = new Platform();
+                                platforms[i].y = 1500;
+                                platforms[i].isHidden = true;
+                                nextOneHidden = false
+
+                            } else {
+                                platforms[i] = new Platform();
+                                platforms[i].y = 0;
+                            }
+
+                            //at 10000, decrease number of platforms (gradually) after each new moving platform
+                            if (points > 500 && movingPlatform == true && platformCount > 11) {
+                                nextOneHidden = true;
+                            }
+
+
+                            //when reach 7000, moving platforms can be quicker (random)
+                            if (movingPlatform == true) {
+                                if (points > 7000 && randomValue < 5)
+                                    platforms[i].speed = randomValue * 2;
+
+                            }
+                            randomValue = false; //reset randomValue for next platform
+                            movingPlatform = false;
                         }
-                        randomValue = false; //reset randomValue for next platform
-                        movingPlatform = false;
                     }
                 }
                 //all rocket goes down by the same amount as the platforms
@@ -341,6 +367,7 @@ function Platform() {
     this.width = 120;
     this.height = 10;
     this.speed = 0;
+    this.isHidden = false;
     this.x = Math.random() * (canvas.width - this.width); //random x position
     this.y = position;
 
@@ -361,8 +388,9 @@ function Platform() {
     };
 };
 
+//1st generation of platforms
 //first platform at the beginning of the array (first to be tested)
-for (var i = platformCount - 1; i >= 0; i--) {
+for (var i = platformCount-1; i >= 0; i--) {
     platforms[i] = (new Platform());
     //1st platform always in the middle for start
     if (i == 0) {
