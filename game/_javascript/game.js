@@ -671,7 +671,7 @@ function showScore(winner, looser) {
     displayScore();
 }
 
-function reload() {
+/* function reload() {
     $.ajax({
         type: "GET",
         url: "index.html",
@@ -680,6 +680,8 @@ function reload() {
         }
     });
 }
+
+*/
 
 /********************************************************
 HANDLE SCORES AND PALMARES
