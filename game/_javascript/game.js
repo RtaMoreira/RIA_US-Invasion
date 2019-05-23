@@ -125,6 +125,14 @@ var launchGame = function () {
     x = "John"; // Now x is a String
     console.log(typeof (x));
 
+    function first(callback){
+        console.log("doing first task");
+        callback();
+    }
+    first(function(){
+        console.log("doing second task");
+    })
+
 }
 
 //elements
